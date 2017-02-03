@@ -1,0 +1,170 @@
+html {
+    font-family: 'Roboto';
+}
+
+body {
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0px;
+}
+span {
+    font-size: 14px;
+}
+
+.app-bar-user-img{
+    position: absolute;
+    left: 55px;
+}
+.app-bar-user-info{
+    position: absolute;
+    left: 115px;
+    top: 15px;
+    color: white;
+}
+
+.panel-container{
+    background: #5c6bc0;
+    height: 48px;
+}
+.panel-list {
+    position: absolute;
+    width: 400px;
+    min-width: 400px;
+}
+.panel-list-header {
+    height: 48px;
+}
+.panel-list-btn {
+    float: right;
+    margin: 10px;
+}
+.panel-list-length {
+    border-radius: 25px;
+    background: #e0e0e0;
+    padding: 5px 25px 5px 25px;
+    color: #3F51B5;
+}
+.panel-list-container {
+    display:block;
+    width: 100%;
+    min-width: 400px;
+    height: 670px;
+    overflow: auto;
+}
+.no-record{
+    height: 70px;
+    line-height: 70px;
+    text-align: center;
+    vertical-align: middle;
+    background: #f6f6f6;
+    color: #aaaaaa;
+}
+.panel-list-add {
+    position: absolute;
+    left: 325px;
+    bottom: 15%;
+}
+
+.panel-tab {
+    padding-left: 400px;
+}
+.content-container{
+    min-height: 630px;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+.content-header{
+    margin: 25px 50px 10px 50px;
+}
+.content{
+    float: left;
+    min-width: 300px;
+    margin: 10px 25px 10px 25px;
+}
+.content-dialog {
+    min-height: 600px;
+}
+.content-min-container {
+    display:block;
+    min-height: 300px;
+    height: 300px;
+    overflow: auto;
+}
+.content-min {
+    float: left;
+    min-width: 150px;
+    margin: 5px;
+}
+.content-x {
+    float: left;
+    margin: 5px;
+}
+.sort-criteria-add {
+    position: absolute;
+    right: 5%;
+    bottom: 20%;
+}
+
+.foot {
+    background: #5c6bc0;
+    height: 48px;
+    position: relative;
+    padding-top: 5px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+.foot-btn {
+    float: right;
+    margin: 0px 10px 0px 10px;
+}
+
+@media only screen and (max-width: 766px){
+    .panel-tab, .foot {
+       display: none;
+    }
+    .panel-list {
+        width: 100%;
+    }
+    .panel-list-add {
+        position: absolute;
+        left: 80%;
+        bottom: 15%;
+    }
+}
+
+.location-month {
+
+}
+
+.location-year {
+	font-size: 2.5em;
+}
+
+.location-time {
+	color: #1c0c4f;
+	margin-top: 20px;
+}
+
+.location-address {
+	color: #d6d6d6;
+	font-size: 1.4em;
+
+}
+
+.location-action {
+	margin-left: 10px;
+}
+
+.location-float-button {
+    position: absolute;
+    left: 1100px;
+    bottom: 15%;
+}
+
+/*
+#3F51B5 indigo500
+#5c6bc0 indigo400
+*/
