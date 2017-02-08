@@ -39,6 +39,10 @@ class DetailLocation extends Component {
 		this.delete2 = this.delete2.bind(this);
     }
 
+    componentWillMount() {
+        debugger
+    }
+
     save() {
         if (this.state.model === "new") {
             this.state.employees.push(this.state.employee);

@@ -18,6 +18,8 @@ import DetailLocation from './DetailLocation'
 
 import {hashHistory} from 'react-router';
 
+import {DETAILS, LOCATION} from '../util/paths';
+
 class EmployeeTab extends Component {
 
     constructor(props, context) {
@@ -28,7 +30,39 @@ class EmployeeTab extends Component {
             viewMode: true,
             gradeErrorTextRequired: '',
             depErrorTextRequired: '',
+            path: null
         }
+
+        const currentLocation = this.props.location.pathname;
+        
+        switch(currentLocation) {
+            case DETAILS:
+                this.state.path = 0;
+                break;
+            case LOCATION:
+                this.state.path = 1;
+                break;
+            default:
+                this.state.path = 0;
+
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const currentLocation = nextProps.location.pathname;
+        
+        switch(currentLocation) {
+            case DETAILS:
+                this.state.path = 0;
+                break;
+            case LOCATION:
+                this.state.path = 1;
+                break;
+            default:
+                this.state.path = 0;
+
+        }
+
     }
 
     handleEditMode() {
@@ -171,9 +205,13 @@ class EmployeeTab extends Component {
 
         const onActiveLocation = () => hashHistory.push('/details/location');
 
+        const activeTab = () => {
+
+        }
+
         return(
             <div>
-                <Tabs>
+                <Tabs initialSelectedIndex={this.state.path}>
                     <Tab icon={<ActionAccountBox />} onActive={onActiveEmployee}>
                         {React.cloneElement(this.props.children, {
                             employee: this.props.employee,
