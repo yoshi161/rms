@@ -10,6 +10,9 @@ import ToogleRadioButtonChecked from 'material-ui/svg-icons/toggle/radio-button-
 
 import LookupData from '../data/LookupData';
 
+import {Link} from 'react-router';
+import {hashHistory} from 'react-router';
+
 class EmployeeListDetail extends Component {
 
     constructor(props, context) {
@@ -26,11 +29,13 @@ class EmployeeListDetail extends Component {
     }
 
     render() {
-
         var division = this.state.lookupDivision.filter(div => (div.code == this.props.employee.division));
         var grade = this.state.lookupGrade.filter(grade => (grade.code == this.props.employee.grade));
         var office = this.state.lookupOffice.filter(office => (office.code == this.props.employee.office));
-
+        const link = id => {
+            hashHistory.push('details/' + id);
+           console.log(id);
+        }
         return(
             <div>
                 <Paper zDepth={1} >
@@ -38,8 +43,8 @@ class EmployeeListDetail extends Component {
                         leftAvatar={this.props.employee.active?
                             <Avatar src={require("../images/kholishul_a.jpg")}/>:
                             <Avatar>{this.props.employee.firstName.charAt(0)}</Avatar>}
-                        rightIcon={<ToogleRadioButtonChecked color={this.props.employee.active? indigo400:grey400}/>}
-                        onClick={this.handleTouchTap.bind(this, this.props.employee)}
+                        rightIcon={<ToogleRadioButtonChecked color={this.props.employee.active? indigo400:grey400}  />}
+                        onClick={() => link(this.props.employee.id)}
                     >
                     <span>
                         <b>{this.props.employee.firstName} {this.props.employee.lastName}</b><br/>

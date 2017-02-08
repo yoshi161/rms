@@ -50,12 +50,14 @@ class EmployeeTab extends Component {
                     // required fields are not filled yet
                     this.handleOpenValidationDialog();
         } else {
-            var index = this.props.employees.map( (employee) => employee.id ).indexOf($("#employeeId").val())
+         //   var index = this.props.employees.map( (employee) => employee.id ).indexOf($("#employeeId").val())
             //console.log("-- Update Employee["+index+"] "+ $("#employeeId").val() +" --");
             //console.log(this.props.employee);
-            var employees = this.props.employees;
-            employees[index] = this.props.employee;
-            this.props.setEmployees(employees);
+           // var employees = this.props.employees;
+          //  employees[index] = (this.props.employee.id, this.props.employee);;
+           // this.props.setEmployees(employees);
+           this.props.editEmployee(this.props.employee.id, 
+                this.props.employee);
             this.setState({
                 viewMode: true,
                 gradeErrorTextRequired: '',
@@ -141,6 +143,7 @@ class EmployeeTab extends Component {
     }
 
     render() {
+        console.log("revisited employee tab");
         const actionsDeleteBtn = [
             <RaisedButton
                 label="Cancel"
@@ -169,6 +172,7 @@ class EmployeeTab extends Component {
                         {React.cloneElement(this.props.children, {
                             employee: this.props.employee,
                             viewMode: this.state.viewMode,
+                            setCurrentEmployee: this.props.setCurrentEmployee,
                             errorTextRequired: "This field is required"
 
                         })}

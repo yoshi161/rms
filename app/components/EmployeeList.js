@@ -111,7 +111,6 @@ class EmployeeList extends Component {
     }
 
     render() {
-		//debugger
         var employee = {}
         if (this.state.searchMode){
             employee = this.state.searchEmployee;

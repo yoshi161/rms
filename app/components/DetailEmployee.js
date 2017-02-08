@@ -16,6 +16,7 @@ class DetailEmployee extends Component {
         this.state = {
             lookupGrade: LookupData.grade,
             lookupDivision: LookupData.division,
+            employee: Object.assign({}, props.employee) 
         }
     }
 
@@ -43,8 +44,9 @@ class DetailEmployee extends Component {
     handleUpdateDetailEmployee(employee){
         this.props.setCurrentEmployee(employee);
     }
+    
 
-    render() {
+    render() { 
         var lookupGrade = this.state.lookupGrade.map ( grade =>
             <MenuItem key={grade.code} value={grade.code} primaryText={grade.desc} />
         );

@@ -44,6 +44,17 @@ class EmployeeDialog extends Component {
                  ],
             }
         }
+
+        this.setNewEmployee = this.setNewEmployee.bind(this);
+        this.getStepContent = this.getStepContent.bind(this);
+    }
+
+
+
+    setNewEmployee(newEmployee) {
+        this.setState({
+            employee: newEmployee
+        })
     }
 
     handleOpenDialog() {
@@ -129,19 +140,12 @@ class EmployeeDialog extends Component {
         }
     }
 
-    setNewEmployee(newEmployee) {
-        this.setState({
-            employee: newEmployee
-        })
-    }
-
     handleAddNewEmployee(){
         let generatedId = this.state.employee.firstName+" "+this.state.employee.lastName;
         generatedId = generatedId.replace(/ /g, '_');
         var newEmployee = update(this.state, {
              employee: {id: {$set: generatedId}}
         });
-        debugger
         var employeesData = this.props.employees
         this.props.addEmployee(newEmployee.employee.id, newEmployee.employee);
         //employeesData.push(newEmployee.employee)
@@ -217,6 +221,7 @@ class EmployeeDialog extends Component {
 
     render() {
         const {stepIndex} = this.state;
+        const asd = "asd";
         const title = [
             <Stepper key="Stepper" linear={true} activeStep={stepIndex}>
               <Step>

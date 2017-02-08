@@ -40,7 +40,6 @@ class DetailLocation extends Component {
     }
 
     save() {
-        debugger
         if (this.state.model === "new") {
             this.state.employees.push(this.state.employee);
             var a = this.state.employees;
@@ -76,7 +75,6 @@ class DetailLocation extends Component {
     }
 
     handleChangeValue(event, type) {
-        debugger
         var a = update(this.state, {
              employee: {[type]: {$set: event.target.value}}
         });

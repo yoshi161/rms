@@ -5,3 +5,11 @@ export function addEmployee(id, employee) {
 		employee
 	}
 }
+
+export function editEmployee(id, employee) {
+	return {
+		type: 'EDIT_EMPLOYEE',
+		id,
+		employee
+	}
+}

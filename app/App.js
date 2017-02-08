@@ -5,9 +5,10 @@ import Dashboard from './components/Dashboard';
 import EmployeeTab from './components/EmployeeTab';
 import DetailEmployee from './components/DetailEmployee';
 import DetailLocation from './components/DetailLocation';
+import NotFound from './components/NotFound';
 
 import Login from './components/Login';
-import { Router, Route, Link, browserHistory, IndexRoute } from 'react-router'
+import { Router, Route, Link, browserHistory, IndexRoute, Redirect } from 'react-router'
 import {bindActionCreators} from 'redux';
 
 import store, {history} from './store';
@@ -30,7 +31,6 @@ class Coba1 extends Component {
 	render() {
 		const a = JSON.stringify(this.props.employees);
 		console.log(this);
-		debugger
 		return (<div>Coba11 {a} {this.props.children}</div>)
 	}
 }
@@ -61,7 +61,13 @@ const routing = (
 					 <IndexRoute component={DetailEmployee} />
 					 <Route path="location" component={DetailLocation} />
 			   </Route>
+				<Route  path="details/:userName"  component={EmployeeTab}>
+					 <IndexRoute component={DetailEmployee} />
+					 <Route path="location" component={DetailLocation} />
+			   </Route>
 			</Route>
+			<Route path='/404' component={NotFound} />
+			<Redirect from='*' to='/404' />
 		</Router>
 	</Provider>
 

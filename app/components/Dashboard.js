@@ -18,23 +18,38 @@ import EmployeeTab from './EmployeeTab'
 
 import LookupData from '../data/LookupData';
 
+import {hashHistory} from 'react-router';
+
 class Dashboard extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
             employees: null,
-            employee: EmployeesData[0],
+            employee: null,
+            current: null,
             lookupGrade: LookupData.grade,
+            emp: this.props.params.userName
         }
+
+        this.filterEmployee = this.filterEmployee.bind(this);
+        this.editEmployee = this.editEmployee.bind(this);
         console.log(new Date())
         console.log("-- Init State --");
         console.log(this.state);
     }
 
     setEmployees(employees) {
-        this.setState({
+      /*  this.setState({
             employees: employees
-        })
+        }) */
+        this.props.editEmployee()
+    }
+
+    editEmployee(id, employee) {
+      /*  this.setState({
+            employees: employees
+        }) */
+        this.props.editEmployee(id, employee);
     }
 
     setCurrentEmployee(currentEmployee) {
@@ -71,9 +86,31 @@ class Dashboard extends Component {
                     {startDate: new Date(1991,3,2), endDate: new Date(1991,4,3), grade: 'SE2', devStage: 4},
                 ]
             })
+
+        this.filterEmployee (this.props.employees);
     }
 
+
+    filterEmployee (employees) {
+        if (this.state.emp) {
+            const employee = employees.find(e =>  e.id === this.state.emp);
+
+            this.state.employee = employee ? employee : hashHistory.push('404');
+
+        } else {
+            this.state.employee = employees[0];
+        }
+    }
+
+    componentWillReceiveProps(nextProps){
+       this.state.emp = nextProps.params.userName;
+       this.filterEmployee (nextProps.employees);
+    }
+
+
     render() {
+
+        console.log("revisited dashboard");
         var grade = this.state.lookupGrade.filter(grade => (grade.code == this.state.employee.grade));
 
         return (
@@ -108,7 +145,10 @@ class Dashboard extends Component {
                             />
                         </div>
                         <div className="panel-tab">
-                                {React.cloneElement(this.props.children, {employee: this.state.employee})}
+                                {React.cloneElement(this.props.children, {
+                                    employee: this.state.employee,
+                                    editEmployee: this.editEmployee,
+                                    setCurrentEmployee: this.setCurrentEmployee.bind(this)})}
                         </div>
                         <div>
                             <EmployeeDialog
@@ -116,6 +156,7 @@ class Dashboard extends Component {
                                 employees={this.props.employees}
                                 employee={this.state.employee}
                                 setEmployees={this.setEmployees.bind(this)}
+                                setCurrentEmployee={this.setCurrentEmployee.bind(this)}
                             />
                         </div>
                     </div>
