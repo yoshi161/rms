@@ -16,6 +16,8 @@ import DetailGrade from './DetailGrade'
 import DetailDependent from './DetailDependent'
 import DetailLocation from './DetailLocation'
 
+import {hashHistory} from 'react-router';
+
 class EmployeeTab extends Component {
 
     constructor(props, context) {
@@ -165,10 +167,14 @@ class EmployeeTab extends Component {
             />,
         ];
 
+        const onActiveEmployee = () => hashHistory.push('details');
+
+        const onActiveLocation = () => hashHistory.push('/details/location');
+
         return(
             <div>
                 <Tabs>
-                    <Tab icon={<ActionAccountBox />} >
+                    <Tab icon={<ActionAccountBox />} onActive={onActiveEmployee}>
                         {React.cloneElement(this.props.children, {
                             employee: this.props.employee,
                             viewMode: this.state.viewMode,
@@ -177,6 +183,15 @@ class EmployeeTab extends Component {
 
                         })}
                      </Tab>
+                   <Tab icon={<CommunicationLocationOn/>}  onActive={onActiveLocation}>
+                        {React.cloneElement(this.props.children, {
+                            employee: this.props.employee,
+                            viewMode: this.state.viewMode,
+                            setCurrentEmployee: this.props.setCurrentEmployee,
+                            errorTextRequired: "This field is required"
+
+                        })}
+                   </Tab>
                </Tabs>
                 <div className="foot">
                     { (this.state.viewMode) ? (
