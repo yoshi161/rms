@@ -46,6 +46,7 @@ class EmployeeTab extends Component {
                 this.state.path = 0;
 
         }
+        this.handleUpdateEmployee = this.handleUpdateEmployee.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -81,7 +82,7 @@ class EmployeeTab extends Component {
                 // Detail Dependents
                 || ( this.checkDependent())
                 // Detail Location
-                || this.props.employee.office==""
+              //  || this.props.employee.office==""
                 ){
                     // required fields are not filled yet
                     this.handleOpenValidationDialog();
@@ -216,6 +217,7 @@ class EmployeeTab extends Component {
                         {React.cloneElement(this.props.children, {
                             employee: this.props.employee,
                             viewMode: this.state.viewMode,
+                            employees: this.props.employees,
                             setCurrentEmployee: this.props.setCurrentEmployee,
                             errorTextRequired: "This field is required"
 
@@ -225,8 +227,10 @@ class EmployeeTab extends Component {
                         {React.cloneElement(this.props.children, {
                             employee: this.props.employee,
                             viewMode: this.state.viewMode,
+                            employees: this.props.employees,
                             setCurrentEmployee: this.props.setCurrentEmployee,
-                            errorTextRequired: "This field is required"
+                            errorTextRequired: "This field is required",
+                            handleUpdateEmployee: this.handleUpdateEmployee
 
                         })}
                    </Tab>

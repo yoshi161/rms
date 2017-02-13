@@ -31,7 +31,8 @@ class EmployeeListDetail extends Component {
     render() {
         var division = this.state.lookupDivision.filter(div => (div.code == this.props.employee.division));
         var grade = this.state.lookupGrade.filter(grade => (grade.code == this.props.employee.grade));
-        var office = this.state.lookupOffice.filter(office => (office.code == this.props.employee.office));
+        var offices = [{desc:''}]
+        var office = this.props.employee.office ? this.state.lookupOffice.filter(office => (office.code == this.props.employee.office)) : offices;
         const link = id => {
             hashHistory.push('details/' + id);
            console.log(id);

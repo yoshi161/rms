@@ -129,14 +129,7 @@ class EmployeeDialog extends Component {
             case 4:
                 return 'Address';
             default:
-                return (
-                    <DetailLocation
-                        employee={this.state.employee}
-                        viewMode={false}
-                        errorTextRequired={this.state.errorTextRequired}
-                        setCurrentEmployee={this.setNewEmployee.bind(this)}
-                    />
-                );
+                return
         }
     }
 
@@ -197,9 +190,6 @@ class EmployeeDialog extends Component {
             case 4:
                 break;
             case 5:
-                if (this.state.employee.office==""){
-                    errorTextRequired = true;
-                }
                 break;
         }
 

@@ -37,28 +37,20 @@ class DetailLocation extends Component {
 		this.save = this.save.bind(this);
 		this.create = this.create.bind(this);
 		this.delete2 = this.delete2.bind(this);
+        this.locationAddressInput = this.locationAddressInput.bind(this);
+       // this.handleChangeValue = this.handleChangeValue.bind(this);
     }
 
     componentWillMount() {
-        debugger
     }
 
     save() {
-        if (this.state.model === "new") {
-            this.state.employees.push(this.state.employee);
-            var a = this.state.employees;
-            this.setState({
-                viewMode: true,
-                employees: a
-            });
-        }   else {
-            var index = this.state.employee.index;
-            this.state.employees[index] = this.state.employee;
-            this.setState({
-                viewMode: true
-            });
-        }
-    }
+
+        this.props.handleUpdateEmployee();
+        this.setState({
+            viewMode: true
+        });
+}
 
     create() {
         this.setState({
@@ -79,14 +71,12 @@ class DetailLocation extends Component {
     }
 
     handleChangeValue(event, type) {
-        var a = update(this.state, {
+        debugger
+        var a = update(this.props, {
              employee: {[type]: {$set: event.target.value}}
         });
-        
-        this.forceUpdate();
-      //  this.setState({employee: a});
-       // this.props.setCurrentEmployee(nextState.employee);
-      //  this.setState({employee: nextState.employee});
+
+        this.props.setCurrentEmployee(a.employee);
     }
 
     handleChangeSelectValue(event, index, value, type) {
@@ -132,6 +122,17 @@ class DetailLocation extends Component {
         });
     }
 
+    locationAddressInput (emp) {
+        return (
+            <div className="location-address">
+                <TextField hintText="Address"
+                    value={emp.address}
+                    onChange={event => this.handleChangeValue(event, 'address')}/>
+            </div>
+        );
+
+    }
+
     render() {
 
 
@@ -170,21 +171,14 @@ class DetailLocation extends Component {
             </div>
 		);
 
-		var locationAddressInput = (
-            <div className="location-address">
-                <TextField hintText="Address"
-                    value={this.state.employee.address}
-                    onChange={event => this.handleChangeValue(event, 'address')}/>
-            </div>
-		);
-
 		var locationField = function (emp) {
             return <div className="location-address">{emp.address}</div>
 		}
 
-		var asdf = this.state.employees.map((emp, index) =>
+        var a = [this.props.employees[0]];
+		var asdf = a.map((emp, index) =>
             (
-				  <Grid >
+				  <Grid key={index} >
 					<Row className="show-grid">
 						<Col sm={3} md={3} className="location-time">
 							<div className="location-month"> November - February </div>
@@ -192,15 +186,15 @@ class DetailLocation extends Component {
 						</Col>
 						<Col sm={4} md={4} >
 							<SelectField
-								value={this.props.employee.office}
+								value={emp.office}
 								floatingLabelText="Office"
-								errorText={this.props.employee.office==""?this.props.errorTextRequired:""}
+								errorText={emp.office==""?this.props.errorTextRequired:""}
 								onChange={(event, index, value) =>  this.handleChangeSelectValue(event, index, value, 'office')} disabled={this.state.viewMode} >
 								{lookupOffice}
 							</SelectField>
 							<div> Address </div>
 							{ this.state.viewMode ? locationField(emp) : null }
-							{ !this.state.viewMode ? locationAddressInput : null }
+							{ !this.state.viewMode ? this.locationAddressInput(emp) : null }
 						</Col>
 						<Col sm={4} md={2} >
 							{ this.state.viewMode ? actions(event, index, this) : null }
@@ -216,7 +210,7 @@ class DetailLocation extends Component {
                 <Row className="show-grid">
                     <Col sm={3} md={3} className="location-time">
                         <div className="location-month"> November - February </div>
-                        <div className="location-year"> 2016-PRESENT </div>
+                        <div className="location-year"> 2016-PRESENTs </div>
                     </Col>
                     <Col sm={4} md={4} >
                         <SelectField
@@ -227,8 +221,8 @@ class DetailLocation extends Component {
                             {lookupOffice}
                         </SelectField>
                         <div> Address </div>
-                        { this.state.viewMode ? locationField(this.state.employee) : null }
-                        { !this.state.viewMode ? locationAddressInput : null }
+                        { this.state.viewMode ? locationField(this.props.employee) : null }
+                        { !this.state.viewMode ? this.locationAddressInput(this.props.employee) : null }
 
                         <input type="hidden" name="index" value={this.state.employee.index} />
                     </Col>

@@ -146,6 +146,7 @@ class Dashboard extends Component {
                         </div>
                         <div className="panel-tab">
                                 {React.cloneElement(this.props.children, {
+                                    employees: this.props.employees,
                                     employee: this.state.employee,
                                     editEmployee: this.editEmployee,
                                     setCurrentEmployee: this.setCurrentEmployee.bind(this)})}
@@ -154,7 +155,7 @@ class Dashboard extends Component {
                             <EmployeeDialog
                                 addEmployee={this.props.addEmployee}
                                 employees={this.props.employees}
-                                employee={this.state.employee}
+                                employee={this.props.employee}
                                 setEmployees={this.setEmployees.bind(this)}
                                 setCurrentEmployee={this.setCurrentEmployee.bind(this)}
                             />

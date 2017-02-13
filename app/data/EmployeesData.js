@@ -2,6 +2,7 @@ const EmployeesData = [
     {
         id: 'kholishul_a',
         firstName: 'Kholishul',
+        address: 'jalan arif rakhman hakim',
         lastName: 'Aziz',
         gender: 'M',
         dob: new Date(1991,3,1),
@@ -17,6 +18,7 @@ const EmployeesData = [
         email: 'kholishul.aziz@mitrais.com',
         office: 'JOG',
         active: true,
+        location: [],
         dependents: [
             {name: "Aziz's Wife", dob: new Date(1991,3,1), gender: 'F', type: 'W', active: true},
             {name: "Aziz's Jr", dob: new Date(2017,3,1), gender: 'M', type: 'C', active: true},
