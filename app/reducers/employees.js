@@ -19,6 +19,9 @@ function employees (state=[], action) {
 			return [...state, action.employee ? action.employee : null];
 		case 'EDIT_EMPLOYEE':
 			return editEmployee(state, action);
+		case 'LOAD_EMPLOYEES':
+			debugger
+			return [...action.employees];
 		default:
 			return state;
 

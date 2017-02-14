@@ -27,10 +27,24 @@ var config = {
     }]
   },
   devServer: {
+    port: 8080,
     contentBase: "./public",
     colors: true,
     historyApiFallback: true,
-    inline: true
+    inline: true,
+    proxy: {
+      "/api/*": {
+        target: {
+          "host": "localhost",
+          "protocol": 'http:',
+          "port": 3000
+        },
+        pathRewrite: {"^/api" : ""},
+        ignorePath: true,
+        changeOrigin: true,
+        secure: false
+      }
+    }
   },
 }
 

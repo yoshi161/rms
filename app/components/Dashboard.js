@@ -86,6 +86,7 @@ class Dashboard extends Component {
                     {startDate: new Date(1991,3,2), endDate: new Date(1991,4,3), grade: 'SE2', devStage: 4},
                 ]
             })
+        this.props.loadEmployeesAsync();
 
         this.filterEmployee (this.props.employees);
     }
