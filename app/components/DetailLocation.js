@@ -71,7 +71,6 @@ class DetailLocation extends Component {
     }
 
     handleChangeValue(event, type) {
-        debugger
         var a = update(this.props, {
              employee: {[type]: {$set: event.target.value}}
         });

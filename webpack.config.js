@@ -34,13 +34,7 @@ var config = {
     inline: true,
     proxy: {
       "/api/*": {
-        target: {
-          "host": "localhost",
-          "protocol": 'http:',
-          "port": 3000
-        },
-        pathRewrite: {"^/api" : ""},
-        ignorePath: true,
+        target: 'http://localhost:9000/',
         changeOrigin: true,
         secure: false
       }

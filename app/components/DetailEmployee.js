@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
 import update from 'react-addons-update';
 
+import { connect } from 'react-redux'
+
 import Avatar from 'material-ui/Avatar';
 import DatePicker from 'material-ui/DatePicker';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
+import { reduxForm, Field, SubmissionError } from 'redux-form';
 
 import LookupData from '../data/LookupData';
-
 class DetailEmployee extends Component {
 
     constructor(props, context) {
@@ -18,6 +20,9 @@ class DetailEmployee extends Component {
             lookupDivision: LookupData.division,
             employee: Object.assign({}, props.employee) 
         }
+
+    const { DOM: { input, select, textarea } } = React
+
     }
 
     handleChangeValue(event, type) {
@@ -54,117 +59,12 @@ class DetailEmployee extends Component {
             <MenuItem key={div.code} value={div.code} primaryText={div.desc} />
         );
 
+
         return(
             <div className="content-container">
                 <h2 className="content-header">Employee</h2>
                 <div className="content" >
-                    <input type="hidden" id="employeeId" value={this.props.employee.id}/>
-                    <TextField
-                        value={this.props.employee.firstName}
-                        floatingLabelText="First Name"
-                        errorText={this.props.employee.firstName==""?this.props.errorTextRequired:""}
-                        onChange={event => this.handleChangeValue(event, 'firstName')}
-                        disabled={this.props.viewMode}
-                    /><br />
-                    <TextField
-                        value={this.props.employee.lastName}
-                        floatingLabelText="Last Name"
-                        errorText={this.props.employee.lastName==""?this.props.errorTextRequired:""}
-                        onChange={event => this.handleChangeValue(event, 'lastName')}
-                        disabled={this.props.viewMode}
-                    /><br />
-                    <SelectField
-                        value={this.props.employee.gender}
-                        floatingLabelText="Gender"
-                        errorText={this.props.employee.gender==""?this.props.errorTextRequired:""}
-                        onChange={(event, index, value) =>  this.handleChangeSelectValue(event, index, value, 'gender')}
-                        disabled={this.props.viewMode} >
-                        <MenuItem value={"M"} primaryText="Male" />
-                        <MenuItem value={"F"} primaryText="Female" />
-                    </SelectField><br />
-                    <DatePicker
-                        value={this.props.employee.dob}
-                        floatingLabelText="Date of Birth"
-                        errorText={this.props.employee.dob==""?this.props.errorTextRequired:""}
-                        onChange={(event, date) =>  this.handleChangeDateValue(event, date, 'dob')}
-                        autoOk={true}
-                        disabled={this.props.viewMode}
-                    />
-                    <TextField
-                        value={this.props.employee.nationality}
-                        floatingLabelText="Nationality"
-                        onChange={event => this.handleChangeValue(event, 'nationality')}
-                        disabled={this.props.viewMode}
-                    /><br />
-                    <SelectField
-                        value={this.props.employee.maritalStatus}
-                        floatingLabelText="Marital Status"
-                        onChange={(event, index, value) =>  this.handleChangeSelectValue(event, index, value, 'maritalStatus')}
-                        disabled={this.props.viewMode}>
-                        <MenuItem value={"S"} primaryText="Single" />
-                        <MenuItem value={"M"} primaryText="Married" />
-                    </SelectField><br />
-                    <TextField
-                        value={this.props.employee.phone}
-                        floatingLabelText="Phone"
-                        errorText={this.props.employee.phone==""?this.props.errorTextRequired:""}
-                        onChange={event => this.handleChangeValue(event, 'phone')}
-                        disabled={this.props.viewMode}
-                    /><br />
-                </div>
-                <div className="content">
-                    <TextField
-                        value={this.props.employee.subDivision}
-                        floatingLabelText="Sub Division"
-                        errorText={this.props.employee.subDivision==""?this.props.errorTextRequired:""}
-                        onChange={event => this.handleChangeValue(event, 'subDivision')}
-                        disabled={this.props.viewMode}
-                    /><br />
-                    <SelectField
-                        value={this.props.employee.status}
-                        floatingLabelText="Status"
-                        onChange={(event, index, value) =>  this.handleChangeSelectValue(event, index, value, 'status')}
-                        disabled={this.props.viewMode} >
-                        <MenuItem value={"C"} primaryText="Contract" />
-                        <MenuItem value={"P"} primaryText="Permanent" />
-                    </SelectField><br />
-                    <DatePicker
-                        value={this.props.employee.suspendDate}
-                        floatingLabelText="Suspend Date"
-                        onChange={(event, date) =>  this.handleChangeDateValue(event, date, 'suspendDate')}
-                        autoOk={true}
-                        disabled={this.props.viewMode}
-                    />
-                    <DatePicker
-                        value={this.props.employee.hireDate}
-                        floatingLabelText="Hire Date"
-                        onChange={(event, date) =>  this.handleChangeDateValue(event, date, 'hireDate')}
-                        autoOk={true}
-                        disabled={this.props.viewMode}
-                    />
-                    <SelectField
-                        value={this.props.employee.grade}
-                        floatingLabelText="Grade"
-                        errorText={this.props.employee.grade==""?this.props.errorTextRequired:""}
-                        onChange={(event, index, value) =>  this.handleChangeSelectValue(event, index, value, 'grade')}
-                        disabled={this.props.viewMode} >
-                        {lookupGrade}
-                    </SelectField><br />
-                    <SelectField
-                        value={this.props.employee.division}
-                        floatingLabelText="Division"
-                        errorText={this.props.employee.division==""?this.props.errorTextRequired:""}
-                        onChange={(event, index, value) =>  this.handleChangeSelectValue(event, index, value, 'division')}
-                        disabled={this.props.viewMode} >
-                        {lookupDivision}
-                    </SelectField><br />
-                    <TextField
-                        value={this.props.employee.email}
-                        floatingLabelText="Email"
-                        errorText={this.props.employee.email==""?this.props.errorTextRequired:""}
-                        onChange={event => this.handleChangeValue(event, 'email')}
-                        disabled={this.props.viewMode}
-                    /><br />
+                      <Field name="firstname" component={input} type="text" placeholder="First Name"/>
                 </div>
                 <div className="content">
                     <Avatar
@@ -177,4 +77,18 @@ class DetailEmployee extends Component {
     }
 }
 
-export default DetailEmployee;
+DetailEmployee = reduxForm({
+  form: 'initializeFromState'  // a unique identifier for this form
+})(DetailEmployee)
+
+// You have to connect() to any reducers that you wish to connect to yourself
+DetailEmployee = connect(
+  state => ({
+    initialValues: {
+        firstname: 'asd'
+    }
+  })              
+)(DetailEmployee)
+
+
+export default DetailEmployee

@@ -1,4 +1,11 @@
-function addEmployee (state = [], action) {
+import * as Immutable from 'seamless-immutable'
+
+const initialState = Immutable.asMutable({
+  employees: []
+});
+
+
+function addEmployee (state = initialState, action) {
 	const employee = action.employee ? action.employee : null
 	switch(action.type) {
 		case 'ADD_EMPLOYEE':
@@ -12,16 +19,21 @@ function addEmployee (state = [], action) {
 	return state;
 } 
 
-function employees (state=[], action) {
+function employees (state=initialState, action) {
 	if (typeof action.id !== 'undefined') {
 	switch(action.type) {
 		case 'ADD_EMPLOYEE':
-			return [...state, action.employee ? action.employee : null];
+			return Immutable.asMutable([...state, action.employee ? action.employee : null]);
 		case 'EDIT_EMPLOYEE':
-			return editEmployee(state, action);
+			return Immutable.asMutable(editEmployee(state, action));
 		case 'LOAD_EMPLOYEES':
-			debugger
-			return [...action.employees];
+			return Immutable.asMutable([...action.employees]);
+		case 'DELETE_EMPLOYEES':
+			let index = state.findIndex((x) => x.name === action.id); 
+			  return Immutable.asMutable([
+			    ...state.slice(0, index),
+			    ...state.slice(index + 1)
+			    ]);
 		default:
 			return state;
 
@@ -31,7 +43,7 @@ function employees (state=[], action) {
 }
 
 
-function editEmployee(state = [], action) {
+function editEmployee(state = initialState, action) {
 	if (typeof action.id !== 'undefined') {
 
 		const index = state.findIndex(s => s.id === action.id)

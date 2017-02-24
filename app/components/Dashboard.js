@@ -33,6 +33,7 @@ class Dashboard extends Component {
 
         this.filterEmployee = this.filterEmployee.bind(this);
         this.editEmployee = this.editEmployee.bind(this);
+        this.deleteEmployee = this.deleteEmployee.bind(this);
         console.log(new Date())
         console.log("-- Init State --");
         console.log(this.state);
@@ -49,8 +50,16 @@ class Dashboard extends Component {
       /*  this.setState({
             employees: employees
         }) */
-        this.props.editEmployee(id, employee);
+        this.props.updateEmployeeAsync(id, employee);
     }
+
+    deleteEmployee(id) {
+      /*  this.setState({
+            employees: employees
+        }) */
+        this.props.deleteEmployeeAsync(id);
+    }
+
 
     setCurrentEmployee(currentEmployee) {
         this.setState({
@@ -150,11 +159,12 @@ class Dashboard extends Component {
                                     employees: this.props.employees,
                                     employee: this.state.employee,
                                     editEmployee: this.editEmployee,
+                                    deleteEmployee: this.deleteEmployee,
                                     setCurrentEmployee: this.setCurrentEmployee.bind(this)})}
                         </div>
                         <div>
                             <EmployeeDialog
-                                addEmployee={this.props.addEmployee}
+                                addEmployee={this.props.addEmployeeAsync}
                                 employees={this.props.employees}
                                 employee={this.props.employee}
                                 setEmployees={this.setEmployees.bind(this)}

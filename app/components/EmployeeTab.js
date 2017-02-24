@@ -132,6 +132,9 @@ class EmployeeTab extends Component {
     }
 
     handleCloseDeleteDialog() {
+        const id = this.props.employee.userName;
+        debugger
+        this.props.deleteEmployee(id);
         this.setState({
             deleteDialogIsOpen: false,
         });

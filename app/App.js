@@ -57,7 +57,7 @@ const routing = (
 	<Provider store={store} >
 		<Router history={history}>
 			<Route component={App} >
-				<Route  path="details"  component={EmployeeTab}>
+				<Route  path="details" component={EmployeeTab}>
 					 <IndexRoute component={DetailEmployee} />
 					 <Route path="location" component={DetailLocation} />
 			   </Route>
