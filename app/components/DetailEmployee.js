@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import update from 'react-addons-update';
 
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
 import Avatar from 'material-ui/Avatar';
 import DatePicker from 'material-ui/DatePicker';
@@ -20,8 +20,6 @@ class DetailEmployee extends Component {
             lookupDivision: LookupData.division,
             employee: Object.assign({}, props.employee) 
         }
-
-    const { DOM: { input, select, textarea } } = React
 
     }
 
@@ -49,9 +47,30 @@ class DetailEmployee extends Component {
     handleUpdateDetailEmployee(employee){
         this.props.setCurrentEmployee(employee);
     }
+
+    componentDidMount() {
+    //  this.handleInitialize();
+    }
     
 
     render() { 
+
+        const renderField = field => (
+            <div>
+              <input {...field.input}/>
+            </div>
+        );
+
+        const renderz = field => (
+                <TextField
+                    {...field}
+                    floatingLabelText="First Name"
+                    errorText={field.firstName ==""?this.props.errorTextRequired:""}
+                    onChange={event => this.handleChangeValue(event, 'firstName')}
+                    disabled={this.props.viewMode}
+                />
+        );
+
         var lookupGrade = this.state.lookupGrade.map ( grade =>
             <MenuItem key={grade.code} value={grade.code} primaryText={grade.desc} />
         );
@@ -59,36 +78,37 @@ class DetailEmployee extends Component {
             <MenuItem key={div.code} value={div.code} primaryText={div.desc} />
         );
 
-
+        var handleSubmit = () => {}
         return(
-            <div className="content-container">
-                <h2 className="content-header">Employee</h2>
-                <div className="content" >
-                      <Field name="firstname" component={input} type="text" placeholder="First Name"/>
-                </div>
-                <div className="content">
-                    <Avatar
-                      src={require("../images/kholishul_a.jpg")}
-                      size={100}
-                    />
-                </div>
-              </div>
+              <form onSubmit={handleSubmit}>
+                 <div className="content-container">
+                        <h2 className="content-header">Employee</h2>
+                        <div className="content">
+
+                            <Field name="firstName" component={renderz} />
+                            <Avatar
+                              src={require("../images/kholishul_a.jpg")}
+                              size={100}
+                            />
+                        </div>
+                 </div>
+              </form>
         );
     }
 }
+
 
 DetailEmployee = reduxForm({
   form: 'initializeFromState'  // a unique identifier for this form
 })(DetailEmployee)
 
+debugger
 // You have to connect() to any reducers that you wish to connect to yourself
-DetailEmployee = connect(
-  state => ({
-    initialValues: {
-        firstname: 'asd'
-    }
+const DetailEmployeeContainer = connect(
+  (state, props) => ({
+    initialValues: props.employee
   })              
 )(DetailEmployee)
 
 
-export default DetailEmployee
+export default DetailEmployeeContainer
