@@ -8,7 +8,7 @@ import DatePicker from 'material-ui/DatePicker';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
-import { reduxForm, Field, SubmissionError } from 'redux-form';
+import { initialize, reduxForm, Field, SubmissionError } from 'redux-form';
 
 import LookupData from '../data/LookupData';
 class DetailEmployee extends Component {
@@ -24,10 +24,10 @@ class DetailEmployee extends Component {
     }
 
     handleChangeValue(event, type) {
-        var nextState = update(this.props, {
+      /*  var nextState = update(this.props, {
              employee: {[type]: {$set: event.target.value}}
         });
-        this.handleUpdateDetailEmployee(nextState.employee);
+        this.handleUpdateDetailEmployee(nextState.employee);*/
     }
 
     handleChangeSelectValue(event, index, value, type) {
@@ -47,29 +47,53 @@ class DetailEmployee extends Component {
     handleUpdateDetailEmployee(employee){
         this.props.setCurrentEmployee(employee);
     }
-
-    componentDidMount() {
-    //  this.handleInitialize();
-    }
-    
+	
+  	shouldComponentUpdate(nextProps) {
+      if (this.props.employee !== nextProps.employee) {
+        this.props.dispatch(initialize('initializeFromState', nextProps.employee));
+      }
+      return true;
+  	}
 
     render() { 
 
-        const renderField = field => (
+        const textComponent = field => (
             <div>
-              <input {...field.input}/>
+              <TextField
+                  {...field.input}
+                  floatingLabelText= {field.label}
+                  errorText={field.label ==""?this.props.errorTextRequired:""}
+                  disabled={this.props.viewMode}
+              />
             </div>
         );
 
-        const renderz = field => (
-                <TextField
-                    {...field}
-                    floatingLabelText="First Name"
-                    errorText={field.firstName ==""?this.props.errorTextRequired:""}
-                    onChange={event => this.handleChangeValue(event, 'firstName')}
-                    disabled={this.props.viewMode}
-                />
+        const selectComponent = field => (
+            <div>
+              <SelectField
+                  {...field}
+                  {...field.input}
+                  floatingLabelText={field.label}
+                  errorText={field.label ==""?this.props.errorTextRequired:""}
+                  disabled={this.props.viewMode} 
+                  onChange={(event, index, value) => field.input.onChange(value)}>
+              </SelectField>
+            </div>
         );
+
+        const datePickerComponent = field => (
+                  <DatePicker
+                       {...field}
+                       {...field.input}
+                      floatingLabelText={field.label}
+                      errorText={this.props.employee.dob==""?this.props.errorTextRequired:""}
+                      onChange={(event, value) => field.input.onChange(value)}
+                      onBlur={(event, value) => {}}
+                      autoOk={true}
+                      disabled={this.props.viewMode}
+                  />
+        );
+
 
         var lookupGrade = this.state.lookupGrade.map ( grade =>
             <MenuItem key={grade.code} value={grade.code} primaryText={grade.desc} />
@@ -80,12 +104,52 @@ class DetailEmployee extends Component {
 
         var handleSubmit = () => {}
         return(
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={this.props.handleSubmit(this.props.handleUpdateEmployee)}>
                  <div className="content-container">
                         <h2 className="content-header">Employee</h2>
                         <div className="content">
 
-                            <Field name="firstName" component={renderz} />
+                            <Field name="firstName" component={textComponent} label="First Name" />
+
+                            <Field name="lastName" component={textComponent} label="Last Name" />
+
+                            <Field name="gender" component={selectComponent} label="Gender">
+                              <MenuItem value={"M"} primaryText="Male" />
+                              <MenuItem value={"F"} primaryText="Female" />
+                            </Field>
+
+                            <Field name="dob" component={datePickerComponent} label="Date of Birth" />
+
+                            <Field name="nationality" component={textComponent} label="Nationality Name" />
+
+                            <Field name="maritalStatus" component={selectComponent} label="Marital Status">
+                              <MenuItem value={"S"} primaryText="Single" />
+                              <MenuItem value={"M"} primaryText="Married" />
+                            </Field>
+
+                            <Field name="phone" component={textComponent} label="Phone" />
+                        </div>
+                        <div className="content">
+
+                            <Field name="subDivision" component={textComponent} label="Sub Division" />
+
+                            <Field name="status" component={selectComponent} label="Status">
+                              <MenuItem value={"C"} primaryText="Contract" />
+                              <MenuItem value={"P"} primaryText="Permanent" />
+                            </Field>
+
+                            <Field name="suspendDate" component={datePickerComponent} label="Suspend Date" />
+
+                            <Field name="hireDate" component={datePickerComponent} label="Hire Date" />
+
+                            <Field name="grade" component={selectComponent} label="Status">
+                              <MenuItem value={"C"} primaryText="Contract" />
+                              <MenuItem value={"P"} primaryText="Permanent" />
+                            </Field>
+
+                            <Field name="email" component={textComponent} label="Email" />
+                        </div>
+                        <div className="content">
                             <Avatar
                               src={require("../images/kholishul_a.jpg")}
                               size={100}
@@ -102,10 +166,10 @@ DetailEmployee = reduxForm({
   form: 'initializeFromState'  // a unique identifier for this form
 })(DetailEmployee)
 
-debugger
 // You have to connect() to any reducers that you wish to connect to yourself
 const DetailEmployeeContainer = connect(
-  (state, props) => ({
+  (state, props) => (
+  {
     initialValues: props.employee
   })              
 )(DetailEmployee)

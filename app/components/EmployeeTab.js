@@ -20,6 +20,10 @@ import {hashHistory} from 'react-router';
 
 import {DETAILS, LOCATION} from '../util/paths';
 
+
+import { connect } from 'react-redux'
+import { reduxForm } from 'redux-form'
+
 class EmployeeTab extends Component {
 
     constructor(props, context) {
@@ -72,7 +76,11 @@ class EmployeeTab extends Component {
         })
     }
 
-    handleUpdateEmployee(){
+    handleUpdateEmployee(vals){
+       // const selector = formValueSelector('selectingFormValues');
+       debugger
+
+
         if (    // Detail Employee
                 this.props.employee.firstName=="" || this.props.employee.lastName=="" || this.props.employee.gender==""
                 /*|| this.props.employee.dob=="" ||*/ || this.props.employee.phone=="" || this.props.employee.subDivision==""
@@ -133,7 +141,6 @@ class EmployeeTab extends Component {
 
     handleCloseDeleteDialog() {
         const id = this.props.employee.userName;
-        debugger
         this.props.deleteEmployee(id);
         this.setState({
             deleteDialogIsOpen: false,
@@ -222,7 +229,8 @@ class EmployeeTab extends Component {
                             viewMode: this.state.viewMode,
                             employees: this.props.employees,
                             setCurrentEmployee: this.props.setCurrentEmployee,
-                            errorTextRequired: "This field is required"
+                            errorTextRequired: "This field is required",
+                            handleUpdateEmployee: this.handleUpdateEmployee
 
                         })}
                      </Tab>

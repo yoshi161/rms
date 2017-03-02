@@ -103,7 +103,7 @@ class Dashboard extends Component {
 
     filterEmployee (employees) {
         if (this.state.emp) {
-            const employee = employees.find(e =>  e.id === this.state.emp);
+            const employee = employees.find(e =>  e.userName === this.state.emp);
 
             this.state.employee = employee ? employee : hashHistory.push('404');
 

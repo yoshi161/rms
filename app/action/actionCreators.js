@@ -6,9 +6,10 @@ function fetching() {
 }
 
 function updating(content) {
-	debugger
-  delete content.id;
-  const theBody = JSON.stringify(content);
+  //delete content.id;
+  var copy = Object.assign({}, content);
+  delete copy.id;
+  const theBody = JSON.stringify(copy);
   return fetch('/api/emfloyees', {
      headers: {
       'Accept': 'application/json',
@@ -20,17 +21,16 @@ function updating(content) {
 }
 
 function adding(content) {
-	debugger
   content.userName = content.id;
-  delete content.id;
-  const theBody = JSON.stringify(content);
+  var copy = Object.assign({}, content);
+  delete copy.id;
   return fetch('/api/emfloyees', {
      headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
      },
   	  method: 'put',
-	  body: theBody
+	  body: JSON.stringify(copy)
 	});
 }
 
@@ -113,7 +113,6 @@ export function addEmployeeAsync(id, employee) {
 }
 
 export function deleteEmployeeAsync(id) {
-	debugger
 	return (dispatch) => {
 		return deleting(id).then(
 				() => {
