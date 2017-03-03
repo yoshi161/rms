@@ -22,7 +22,7 @@ import {DETAILS, LOCATION} from '../util/paths';
 
 
 import { connect } from 'react-redux'
-import { reduxForm } from 'redux-form'
+import { reduxForm, submit } from 'redux-form'
 
 class EmployeeTab extends Component {
 
@@ -78,7 +78,6 @@ class EmployeeTab extends Component {
 
     handleUpdateEmployee(vals){
        // const selector = formValueSelector('selectingFormValues');
-       debugger
 
 
         if (    // Detail Employee
@@ -189,7 +188,13 @@ class EmployeeTab extends Component {
         return rtn;
     }
 
+    submit() {
+        debugger
+        submit('initializeFromState');
+    }
+
     render() {
+
         console.log("revisited employee tab");
         const actionsDeleteBtn = [
             <RaisedButton
@@ -267,7 +272,7 @@ class EmployeeTab extends Component {
                             <RaisedButton
                                 label={"Save"}
                                 secondary={true}
-                                onTouchTap={this.handleUpdateEmployee.bind(this)}
+                                onTouchTap={this.submit.bind(this)}
                                 className="foot-btn"
                             />
                             <RaisedButton

@@ -101,10 +101,8 @@ class DetailEmployee extends Component {
         var lookupDivision = this.state.lookupDivision.map ( div =>
             <MenuItem key={div.code} value={div.code} primaryText={div.desc} />
         );
-
-        var handleSubmit = () => {}
         return(
-              <form onSubmit={this.props.handleSubmit(this.props.handleUpdateEmployee)}>
+              <form onSubmit={this.props.handleSubmit}>
                  <div className="content-container">
                         <h2 className="content-header">Employee</h2>
                         <div className="content">
@@ -162,8 +160,14 @@ class DetailEmployee extends Component {
 }
 
 
+
+  var goSubmit = () => {
+    debugger;
+  }
+        
 DetailEmployee = reduxForm({
-  form: 'initializeFromState'  // a unique identifier for this form
+  form: 'initializeFromState',  // a unique identifier for this form
+  onSubmit: goSubmit
 })(DetailEmployee)
 
 // You have to connect() to any reducers that you wish to connect to yourself
