@@ -20,7 +20,7 @@ import {hashHistory} from 'react-router';
 
 import {DETAILS, LOCATION} from '../util/paths';
 
-
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import { reduxForm, submit } from 'redux-form'
 
@@ -188,9 +188,9 @@ class EmployeeTab extends Component {
         return rtn;
     }
 
-    submit() {
-        debugger
-        submit('initializeFromState');
+    submits() {
+        debugger        
+        this.props.submit('initializeFromState');
     }
 
     render() {
@@ -272,7 +272,7 @@ class EmployeeTab extends Component {
                             <RaisedButton
                                 label={"Save"}
                                 secondary={true}
-                                onTouchTap={this.submit.bind(this)}
+                                onTouchTap={this.submits.bind(this)}
                                 className="foot-btn"
                             />
                             <RaisedButton
@@ -306,4 +306,11 @@ class EmployeeTab extends Component {
     }
 }
 
-export default EmployeeTab;
+
+const mapDispatchToProps = function (dispatch) {
+  return bindActionCreators({
+    submit: submit
+  }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(EmployeeTab);

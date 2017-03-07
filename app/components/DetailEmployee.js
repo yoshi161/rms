@@ -8,7 +8,7 @@ import DatePicker from 'material-ui/DatePicker';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
-import { initialize, reduxForm, Field, SubmissionError } from 'redux-form';
+import { initialize, reduxForm, Field, SubmissionError,Form } from 'redux-form';
 
 import LookupData from '../data/LookupData';
 class DetailEmployee extends Component {
@@ -101,8 +101,14 @@ class DetailEmployee extends Component {
         var lookupDivision = this.state.lookupDivision.map ( div =>
             <MenuItem key={div.code} value={div.code} primaryText={div.desc} />
         );
+
+        const submitz = () => {
+          debugger
+        }
+
+        const { handleSubmit } = this.props;
         return(
-              <form onSubmit={this.props.handleSubmit}>
+              <Form onSubmit={handleSubmit(submitz)}>
                  <div className="content-container">
                         <h2 className="content-header">Employee</h2>
                         <div className="content">
@@ -154,7 +160,7 @@ class DetailEmployee extends Component {
                             />
                         </div>
                  </div>
-              </form>
+              </Form>
         );
     }
 }
