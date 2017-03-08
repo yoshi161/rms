@@ -188,8 +188,7 @@ class EmployeeTab extends Component {
         return rtn;
     }
 
-    submits() {
-        debugger        
+    submits() {  
         this.props.submit('initializeFromState');
     }
 
@@ -231,6 +230,7 @@ class EmployeeTab extends Component {
                     <Tab icon={<ActionAccountBox />} onActive={onActiveEmployee}>
                         {React.cloneElement(this.props.children, {
                             employee: this.props.employee,
+                            editEmployee: this.props.editEmployee,
                             viewMode: this.state.viewMode,
                             employees: this.props.employees,
                             setCurrentEmployee: this.props.setCurrentEmployee,
@@ -242,6 +242,7 @@ class EmployeeTab extends Component {
                    <Tab icon={<CommunicationLocationOn/>}  onActive={onActiveLocation}>
                         {React.cloneElement(this.props.children, {
                             employee: this.props.employee,
+                            editEmployee: this.props.editEmployee,
                             viewMode: this.state.viewMode,
                             employees: this.props.employees,
                             setCurrentEmployee: this.props.setCurrentEmployee,

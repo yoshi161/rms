@@ -8,7 +8,7 @@ import DatePicker from 'material-ui/DatePicker';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
-import { initialize, reduxForm, Field, SubmissionError,Form } from 'redux-form';
+import { initialize, reduxForm, Field, SubmissionError, Form } from 'redux-form';
 
 import LookupData from '../data/LookupData';
 class DetailEmployee extends Component {
@@ -54,6 +54,10 @@ class DetailEmployee extends Component {
       }
       return true;
   	}
+
+    submitz(value) {
+        this.props.editEmployee(value.userName, value);
+    }
 
     render() { 
 
@@ -102,13 +106,9 @@ class DetailEmployee extends Component {
             <MenuItem key={div.code} value={div.code} primaryText={div.desc} />
         );
 
-        const submitz = () => {
-          debugger
-        }
-
         const { handleSubmit } = this.props;
         return(
-              <Form onSubmit={handleSubmit(submitz)}>
+              <Form onSubmit={handleSubmit(this.submitz.bind(this))}>
                  <div className="content-container">
                         <h2 className="content-header">Employee</h2>
                         <div className="content">
@@ -165,15 +165,8 @@ class DetailEmployee extends Component {
     }
 }
 
-
-
-  var goSubmit = () => {
-    debugger;
-  }
-        
 DetailEmployee = reduxForm({
   form: 'initializeFromState',  // a unique identifier for this form
-  onSubmit: goSubmit
 })(DetailEmployee)
 
 // You have to connect() to any reducers that you wish to connect to yourself

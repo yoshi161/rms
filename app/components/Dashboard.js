@@ -25,7 +25,11 @@ class Dashboard extends Component {
         super(props, context);
         this.state = {
             employees: null,
-            employee: null,
+            employee: {
+                firstName: "",
+                lastName: "",
+                dob: ""
+            },
             current: null,
             lookupGrade: LookupData.grade,
             emp: this.props.params.userName
@@ -68,7 +72,7 @@ class Dashboard extends Component {
     }
 
     componentWillMount() {
-        this.props.addEmployee(10,{
+        /*this.props.addEmployee(10,{
                 id: 'kholishul_as',
                 firstName: 'Kholishul I',
                 lastName: 'Aziz I',
@@ -94,34 +98,45 @@ class Dashboard extends Component {
                     {startDate: new Date(1991,3,1), endDate: new Date(1991,3,3), grade: 'SE1', devStage: 1},
                     {startDate: new Date(1991,3,2), endDate: new Date(1991,4,3), grade: 'SE2', devStage: 4},
                 ]
-            })
-        this.props.loadEmployeesAsync();
+            }) */
+    }
 
-        this.filterEmployee (this.props.employees);
+    componentDidMount () {
+
+        this.props.loadEmployeesAsync((data) => {
+           this.filterEmployee(data); 
+        });
     }
 
 
     filterEmployee (employees) {
+        debugger
         if (this.state.emp) {
             const employee = employees.find(e =>  e.userName === this.state.emp);
 
-            this.state.employee = employee ? employee : hashHistory.push('404');
+            if (employee) {
+               this.setState({employee});
+            } else {
+                hashHistory.push('404'); 
+            }
 
         } else {
-            this.state.employee = employees[0];
+           this.setState({employee: employees[0]});
         }
     }
 
-    componentWillReceiveProps(nextProps){
+    shouldComponentUpdate(nextProps){
+        debugger
        this.state.emp = nextProps.params.userName;
        this.filterEmployee (nextProps.employees);
+       return true;
     }
 
 
     render() {
-
         console.log("revisited dashboard");
         var grade = this.state.lookupGrade.filter(grade => (grade.code == this.state.employee.grade));
+        if (grade.length == 0)  grade = [{desc:""}];
 
         return (
             <div>

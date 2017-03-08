@@ -76,12 +76,14 @@ export function deleteEmployee(id) {
 	}
 }
 
-export function loadEmployeesAsync() {
+export function loadEmployeesAsync(callback) {
 	return (dispatch) => {
 		return fetching().then(
 				emp => {
 					emp.json().then( data => {
-						dispatch(loadEmployees(mapper(data)));
+						const parsed = mapper(data);
+						dispatch(loadEmployees(parsed));
+						if (callback) callback(parsed);
 					})
 				},
 				() => dispatch(console.log('error occured'))
