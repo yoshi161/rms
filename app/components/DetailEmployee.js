@@ -11,6 +11,46 @@ import TextField from 'material-ui/TextField';
 import { initialize, reduxForm, Field, SubmissionError, Form } from 'redux-form';
 
 import LookupData from '../data/LookupData';
+
+
+
+const textComponent = field => (
+    <div>
+      <TextField
+          {...field.input}
+          floatingLabelText= {field.label}
+          errorText={field.label ==""?this.props.errorTextRequired:""}
+          disabled={field.disabled}
+      />
+    </div>
+);
+
+const selectComponent = field => (
+    <div>
+      <SelectField
+          {...field}
+          {...field.input}
+          floatingLabelText={field.label}
+          errorText={field.label ==""?this.props.errorTextRequired:""}
+          disabled={field.disabled} 
+          onChange={(event, index, value) => field.input.onChange(value)}>
+      </SelectField>
+    </div>
+);
+
+const datePickerComponent = field => (
+          <DatePicker
+               {...field}
+               {...field.input}
+              floatingLabelText={field.label}
+              errorText={field.label==""?this.props.errorTextRequired:""}
+              onChange={(event, value) => field.input.onChange(value)}
+              onBlur={(event, value) => {}}
+              autoOk={true}
+              disabled={field.disabled}
+          />
+);
+
 class DetailEmployee extends Component {
 
     constructor(props, context) {
@@ -21,13 +61,6 @@ class DetailEmployee extends Component {
             employee: Object.assign({}, props.employee) 
         }
 
-    }
-
-    handleChangeValue(event, type) {
-      /*  var nextState = update(this.props, {
-             employee: {[type]: {$set: event.target.value}}
-        });
-        this.handleUpdateDetailEmployee(nextState.employee);*/
     }
 
     handleChangeSelectValue(event, index, value, type) {
@@ -61,43 +94,6 @@ class DetailEmployee extends Component {
 
     render() { 
 
-        const textComponent = field => (
-            <div>
-              <TextField
-                  {...field.input}
-                  floatingLabelText= {field.label}
-                  errorText={field.label ==""?this.props.errorTextRequired:""}
-                  disabled={this.props.viewMode}
-              />
-            </div>
-        );
-
-        const selectComponent = field => (
-            <div>
-              <SelectField
-                  {...field}
-                  {...field.input}
-                  floatingLabelText={field.label}
-                  errorText={field.label ==""?this.props.errorTextRequired:""}
-                  disabled={this.props.viewMode} 
-                  onChange={(event, index, value) => field.input.onChange(value)}>
-              </SelectField>
-            </div>
-        );
-
-        const datePickerComponent = field => (
-                  <DatePicker
-                       {...field}
-                       {...field.input}
-                      floatingLabelText={field.label}
-                      errorText={this.props.employee.dob==""?this.props.errorTextRequired:""}
-                      onChange={(event, value) => field.input.onChange(value)}
-                      onBlur={(event, value) => {}}
-                      autoOk={true}
-                      disabled={this.props.viewMode}
-                  />
-        );
-
 
         var lookupGrade = this.state.lookupGrade.map ( grade =>
             <MenuItem key={grade.code} value={grade.code} primaryText={grade.desc} />
@@ -113,45 +109,60 @@ class DetailEmployee extends Component {
                         <h2 className="content-header">Employee</h2>
                         <div className="content">
 
-                            <Field name="firstName" component={textComponent} label="First Name" />
+                           <Field name="asd" component="input" type="text" />
 
-                            <Field name="lastName" component={textComponent} label="Last Name" />
+                            <Field name="firstName" component={textComponent} label="First Name" 
+                              disabled={this.props.viewMode} />
 
-                            <Field name="gender" component={selectComponent} label="Gender">
+                            <Field name="lastName" component={textComponent} label="Last Name"  
+                              disabled={this.props.viewMode} />
+
+                            <Field name="gender" component={selectComponent} label="Gender" 
+                              disabled={this.props.viewMode} >
                               <MenuItem value={"M"} primaryText="Male" />
                               <MenuItem value={"F"} primaryText="Female" />
                             </Field>
 
-                            <Field name="dob" component={datePickerComponent} label="Date of Birth" />
+                            <Field name="dob" component={datePickerComponent} label="Date of Birth"  
+                              disabled={this.props.viewMode} />
 
-                            <Field name="nationality" component={textComponent} label="Nationality Name" />
+                            <Field name="nationality" component={textComponent} label="Nationality Name"  
+                              disabled={this.props.viewMode} />
 
-                            <Field name="maritalStatus" component={selectComponent} label="Marital Status">
+                            <Field name="maritalStatus" component={selectComponent} label="Marital Status" 
+                              disabled={this.props.viewMode} >
                               <MenuItem value={"S"} primaryText="Single" />
                               <MenuItem value={"M"} primaryText="Married" />
                             </Field>
 
-                            <Field name="phone" component={textComponent} label="Phone" />
+                            <Field name="phone" component={textComponent} label="Phone"  
+                              disabled={this.props.viewMode} />
                         </div>
                         <div className="content">
 
-                            <Field name="subDivision" component={textComponent} label="Sub Division" />
+                            <Field name="subDivision" component={textComponent} label="Sub Division"  
+                              disabled={this.props.viewMode} />
 
-                            <Field name="status" component={selectComponent} label="Status">
+                            <Field name="status" component={selectComponent} label="Status" 
+                              disabled={this.props.viewMode} >
                               <MenuItem value={"C"} primaryText="Contract" />
                               <MenuItem value={"P"} primaryText="Permanent" />
                             </Field>
 
-                            <Field name="suspendDate" component={datePickerComponent} label="Suspend Date" />
+                            <Field name="suspendDate" component={datePickerComponent} label="Suspend Date"  
+                              disabled={this.props.viewMode} />
 
-                            <Field name="hireDate" component={datePickerComponent} label="Hire Date" />
+                            <Field name="hireDate" component={datePickerComponent} label="Hire Date"  
+                              disabled={this.props.viewMode} />
 
-                            <Field name="grade" component={selectComponent} label="Status">
+                            <Field name="grade" component={selectComponent} label="Status" 
+                              disabled={this.props.viewMode} >
                               <MenuItem value={"C"} primaryText="Contract" />
                               <MenuItem value={"P"} primaryText="Permanent" />
                             </Field>
 
-                            <Field name="email" component={textComponent} label="Email" />
+                            <Field name="email" component={textComponent} label="Email"  
+                              disabled={this.props.viewMode} />
                         </div>
                         <div className="content">
                             <Avatar

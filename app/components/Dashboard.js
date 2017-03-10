@@ -110,7 +110,6 @@ class Dashboard extends Component {
 
 
     filterEmployee (employees) {
-        debugger
         if (this.state.emp) {
             const employee = employees.find(e =>  e.userName === this.state.emp);
 
@@ -126,7 +125,6 @@ class Dashboard extends Component {
     }
 
     shouldComponentUpdate(nextProps){
-        debugger
        this.state.emp = nextProps.params.userName;
        this.filterEmployee (nextProps.employees);
        return true;
