@@ -88,7 +88,7 @@ class DetailEmployee extends Component {
       return true;
   	}
 
-    submitz(value) {
+    submits(value) {
         this.props.editEmployee(value.userName, value);
     }
 
@@ -104,13 +104,10 @@ class DetailEmployee extends Component {
 
         const { handleSubmit } = this.props;
         return(
-              <Form onSubmit={handleSubmit(this.submitz.bind(this))}>
+              <Form onSubmit={handleSubmit(this.submits.bind(this))}>
                  <div className="content-container">
                         <h2 className="content-header">Employee</h2>
                         <div className="content">
-
-                           <Field name="asd" component="input" type="text" />
-
                             <Field name="firstName" component={textComponent} label="First Name" 
                               disabled={this.props.viewMode} />
 

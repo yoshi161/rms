@@ -3,6 +3,7 @@ import {render} from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Dashboard from './components/Dashboard';
 import EmployeeTab from './components/EmployeeTab';
+import DetailHistory from './components/DetailHistory';
 import DetailEmployee from './components/DetailEmployee';
 import DetailLocation from './components/DetailLocation';
 import NotFound from './components/NotFound';
@@ -20,26 +21,6 @@ import { connect, Provider } from 'react-redux';
 // Needed for onTouchTap
 injectTapEventPlugin();
 
-class CobaApp extends Component {
-	render() {
-		console.log(this);
-		return (<div>Coba1 {this.props.children}</div>)
-	}
-}
-
-class Coba1 extends Component {
-	render() {
-		const a = JSON.stringify(this.props.employees);
-		console.log(this);
-		return (<div>Coba11 {a} {this.props.children}</div>)
-	}
-}
-
-class Coba2 extends Component {                         
-	render() {
-		return (<div>Coba2 {this.props.children}</div>)
-	}
-}
 
 function mapStateToProps(state) {
 	return {
@@ -60,10 +41,12 @@ const routing = (
 				<Route  path="details" component={EmployeeTab}>
 					 <IndexRoute component={DetailEmployee} />
 					 <Route path="location" component={DetailLocation} />
+					 <Route path="history" component={DetailHistory} />
 			   </Route>
 				<Route  path="details/:userName"  component={EmployeeTab}>
 					 <IndexRoute component={DetailEmployee} />
 					 <Route path="location" component={DetailLocation} />
+					 <Route path="history" component={DetailHistory} />
 			   </Route>
 			</Route>
 			<Route path='/404' component={NotFound} />

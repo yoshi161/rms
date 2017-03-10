@@ -218,6 +218,8 @@ class EmployeeTab extends Component {
 
         const onActiveEmployee = () => hashHistory.push('details');
 
+        const onActiveHistory = () => hashHistory.push('/details/history');
+
         const onActiveLocation = () => hashHistory.push('/details/location');
 
         const activeTab = () => {
@@ -227,7 +229,19 @@ class EmployeeTab extends Component {
         return(
             <div>
                 <Tabs initialSelectedIndex={this.state.path}>
-                    <Tab icon={<ActionAccountBox />} onActive={onActiveEmployee}>
+                   <Tab icon={<ActionAccountBox />} onActive={onActiveEmployee}>
+                        {React.cloneElement(this.props.children, {
+                             employee: this.props.employee,
+                            editEmployee: this.props.editEmployee,
+                            viewMode: this.state.viewMode,
+                            employees: this.props.employees,
+                            setCurrentEmployee: this.props.setCurrentEmployee,
+                            errorTextRequired: "This field is required",
+                            handleUpdateEmployee: this.handleUpdateEmployee
+
+                        })}
+                   </Tab>
+                   <Tab icon={<ActionHistory />} onActive={onActiveHistory}>
                         {React.cloneElement(this.props.children, {
                             employee: this.props.employee,
                             editEmployee: this.props.editEmployee,
@@ -238,7 +252,7 @@ class EmployeeTab extends Component {
                             handleUpdateEmployee: this.handleUpdateEmployee
 
                         })}
-                     </Tab>
+                   </Tab>
                    <Tab icon={<CommunicationLocationOn/>}  onActive={onActiveLocation}>
                         {React.cloneElement(this.props.children, {
                             employee: this.props.employee,
