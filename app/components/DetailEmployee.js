@@ -4,52 +4,16 @@ import update from 'react-addons-update';
 import { connect } from 'react-redux';
 
 import Avatar from 'material-ui/Avatar';
-import DatePicker from 'material-ui/DatePicker';
-import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import TextField from 'material-ui/TextField';
 import { initialize, reduxForm, Field, SubmissionError, Form } from 'redux-form';
 
 import LookupData from '../data/LookupData';
 
+import {textComponent, selectComponent, datePickerComponent} from './reduxForms';
 
 
-const textComponent = field => (
-    <div>
-      <TextField
-          {...field.input}
-          floatingLabelText= {field.label}
-          errorText={field.label ==""?this.props.errorTextRequired:""}
-          disabled={field.disabled}
-      />
-    </div>
-);
 
-const selectComponent = field => (
-    <div>
-      <SelectField
-          {...field}
-          {...field.input}
-          floatingLabelText={field.label}
-          errorText={field.label ==""?this.props.errorTextRequired:""}
-          disabled={field.disabled} 
-          onChange={(event, index, value) => field.input.onChange(value)}>
-      </SelectField>
-    </div>
-);
 
-const datePickerComponent = field => (
-          <DatePicker
-               {...field}
-               {...field.input}
-              floatingLabelText={field.label}
-              errorText={field.label==""?this.props.errorTextRequired:""}
-              onChange={(event, value) => field.input.onChange(value)}
-              onBlur={(event, value) => {}}
-              autoOk={true}
-              disabled={field.disabled}
-          />
-);
 
 class DetailEmployee extends Component {
 
