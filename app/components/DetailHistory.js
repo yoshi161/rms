@@ -16,6 +16,13 @@ import { connect } from 'react-redux';
 
 import {textComponent, selectComponent, datePickerComponent} from './reduxForms';
 
+
+const textC = field => (
+    <div>
+      {field.label}
+    </div>
+);
+
 class DetailHistory extends Component {
 
     constructor(props, context) {
@@ -27,13 +34,10 @@ class DetailHistory extends Component {
         }
     }
 
-    changeDate() {
-    	alert("change date");
-    }
-
     changeDateState() {
     	const newState = !this.state.dateState
     	this.setState({dateState: newState})
+    	console.log("change date");
     }
 
     changeProjectState() {
@@ -49,56 +53,6 @@ class DetailHistory extends Component {
   
 
     render() {
-
-
-    	function Dates(props) {
-
-    		const dateButtonStyle = {float: 'right', marginRight: '10px'};
-
-    		const state = props.theState
-    		const changeDate = props.changeDate
-    		if (state) {	
-    			return (
-	    				<div>
-							<Field name="startDate" component={datePickerComponent} label="Start Date"/>
-							<Field name="endDate" component={datePickerComponent} label="End Date"/>
-							<div>
-             				   <Glyphicon glyph="floppy-disk" style={dateButtonStyle} />
-             				   <Glyphicon glyph="remove" style={dateButtonStyle} />
-							</div>
-	    				</div>
-    				);
-
-    		} else {
-    			return  (
-	    				<div>
-							<div className="location-month" onClick={changeDate}> November - February </div>
-							<div className="location-year" onClick={changeDate}> 2016-PRESENT </div>
-	    				</div>
-    			);
-    		}
-    	}
-
-    	function TheInput(props) {
-
-    		const projectStyle = {height: '85px'};
-    		const dateButtonStyle = {float: 'right', marginRight: '10px'};
-    		const state = props.theState, change = props.change
-    		if (state) {
-    			return   (
-    				<div style={projectStyle}>
-						<Field name={props.name} component={textComponent} label={props.label} style={dateButtonStyle} />
-     				    <Glyphicon glyph="floppy-disk" style={dateButtonStyle} />
-     				    <Glyphicon glyph="remove" style={dateButtonStyle} />
-    				</div>
-    				);
-    		} else {
-    			return (
-					<div>a
-					</div>
-    				)
-    		}
-    	}
 
     	const style = {width: '100%', color: 'black', height: '1px', backgroundColor: 'purple'};
 
@@ -131,10 +85,8 @@ class DetailHistory extends Component {
 				  <Grid>
 					<Row className="show-grid">
 						<Col sm={3} md={3} className="location-time">
-							<FieldArray name="members" component= { fields => 
-								{ debugger }
-    						} />
-                            <Field name="asd" component={textComponent} label="First Name"  />
+							<FieldArray name="data" component= { renderData } />
+                            <Field name="asd" component={textC} label="First Name"  />
 						</Col>
 					</Row>
 				  </Grid>
@@ -143,6 +95,70 @@ class DetailHistory extends Component {
     }
 }
 
+
+
+const Dates = function (props) {
+
+	const dateButtonStyle = {float: 'right', marginRight: '10px'};
+
+	const state = props.theState
+	const changeDate = props.changeDate
+	if (state) {	
+		return (
+				<div>
+					<Field name="startDate" component={datePickerComponent} label="Start Date"/>
+					<Field name="endDate" component={datePickerComponent} label="End Date"/>
+					<div>
+     				   <Glyphicon glyph="floppy-disk" style={dateButtonStyle} />
+     				   <Glyphicon glyph="remove" style={dateButtonStyle} />
+					</div>
+				</div>
+			);
+
+	} else {
+		return  (
+				<div>
+					<div className="location-month" onClick={changeDate}> November - February </div>
+					<div className="location-year" onClick={changeDate}> 2016-PRESENT </div>
+				</div>
+		);
+	}
+}
+
+const TheInput = function (props) {
+
+	const projectStyle = {height: '85px'};
+	const dateButtonStyle = {float: 'right', marginRight: '10px'};
+	const state = props.theState, change = props.change
+	if (state) {
+		return   (
+			<div style={projectStyle}>
+				<Field name={props.name} component={textComponent} label={props.label} style={dateButtonStyle} />
+				    <Glyphicon glyph="floppy-disk" style={dateButtonStyle} />
+				    <Glyphicon glyph="remove" style={dateButtonStyle} />
+			</div>
+			);
+	} else {
+		return (
+			<div>a
+			</div>
+			)
+	}
+}
+
+const renderData = ({fields}) => (
+		<div>
+			{fields.getAll().map((data, index) => (
+					<div key={index}>
+				        <Field name={`data[${index}].project`} component={textComponent}  label="Project"/>
+					</div>
+					)
+				)}
+
+   		 <button type="button" onClick={() => fields.push({project: "asdasdasd"})}>Add Member</button>
+		</div>
+	)
+
 DetailHistory = reduxForm({
   form: 'detailHistory',  // a unique identifier for this form
 })(DetailHistory)
@@ -150,8 +166,10 @@ DetailHistory = reduxForm({
 // You have to connect() to any reducers that you wish to connect to yourself
 const DetailHistoryContainer = connect(
   (state, props) => ({
+
+    	formValues: formValueSelector('detailHistory'),
 	    initialValues: {
-	    	members : [{
+	    	data : [{
 	    		project: 'Project Name 1',
 	    		program: 'Program 1',
 	    		startDate:Date.now(),
@@ -175,7 +193,11 @@ const DetailHistoryContainer = connect(
 	    			"details 4"
 	    		]
 
-	    	}], asd: "asd"}
+	    	}], 
+	    	asd: "asd",
+    		startDate:Date.now(),
+    		endDate: Date.now()
+    		}
   })              
 )(DetailHistory)
 
