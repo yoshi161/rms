@@ -58,6 +58,8 @@ class DetailHistory extends Component {
 
     	const style = {width: '100%', color: 'black', height: '1px', backgroundColor: 'purple'};
 
+
+
         return(
             <div className="content-container">
                 <h2 className="content-header">History</h2>
@@ -91,7 +93,7 @@ const dataRender = (props) => (
 				  </Grid>
 			))}
 
-   		 <button type="button" onClick={() => fields.push({project: "asdasdasd"})}>Add Member</button>
+   		 <button type="button" onClick={() => change('data[0].state', true)}>Add Member</button>
 		</div>
 	)
 
@@ -119,7 +121,7 @@ const Dates = function (props) {
 	} else {
 		return  (
 				<div>
-					<div className="location-month" onClick={() => props.change('data[0].state', true)}> November - February </div>
+					<div className="location-month" onClick={() => props.change(`data[${props.index}].state`, true)}> November - February </div>
 					<div className="location-year" onClick={() => {debugger}}> 2016-PRESENT </div>
 				</div>
 		);
