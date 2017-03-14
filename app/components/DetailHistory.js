@@ -16,13 +16,6 @@ import { connect } from 'react-redux';
 
 import {textComponent, selectComponent, datePickerComponent} from './reduxForms';
 
-
-const textC = field => (
-    <div>
-      {field.label}
-    </div>
-);
-
 class DetailHistory extends Component {
 
     constructor(props, context) {
@@ -70,9 +63,9 @@ class DetailHistory extends Component {
     }
 }
 
-const dataRender = (props) => (
+const dataRender = (props) => {(
 		<div>
-			{props.fields.getAll().map((data, index) => (
+			{props.fields && props.fields.length > 0 ? props.fields.getAll().map((data, index) => (
 				  <Grid key={index}>
 					<Row className="show-grid">
 						<Col sm={3} md={3} className="location-time">
@@ -91,11 +84,11 @@ const dataRender = (props) => (
 						</Col>
 					</Row>
 				  </Grid>
-			))}
+			)) : <div></div>}
 
-   		 <button type="button" onClick={() => change('data[0].state', true)}>Add Member</button>
+   		 <button type="button" onClick={() => props.fields.push({project: "asdasdasd"})}>Add Member</button>
 		</div>
-	)
+	)}
 
 
 
@@ -105,14 +98,13 @@ const Dates = function (props) {
 	const state = props.theState
 	const changeDate = props.changeDate
 	const prop = props;
-	debugger
 	if (state) {	
 		return (
 				<div>
-					<Field name="startDate" component={datePickerComponent} label="Start Date"/>
-					<Field name="endDate" component={datePickerComponent} label="End Date"/>
+					<Field name={`data[${props.index}].startDate`} component={datePickerComponent} label="Start Date"/>
+					<Field name={`data[${props.index}].endDate`} component={datePickerComponent} label="End Date"/>
 					<div>
-     				   <Glyphicon glyph="floppy-disk" style={dateButtonStyle} />
+     				   <Glyphicon glyph="floppy-disk" style={dateButtonStyle} onClick={() => props.change(`data[${props.index}].state`, false)}/>
      				   <Glyphicon glyph="remove" style={dateButtonStyle} />
 					</div>
 				</div>
@@ -121,46 +113,23 @@ const Dates = function (props) {
 	} else {
 		return  (
 				<div>
-					<div className="location-month" onClick={() => props.change(`data[${props.index}].state`, true)}> November - February </div>
-					<div className="location-year" onClick={() => {debugger}}> 2016-PRESENT </div>
+					<div onClick={() => props.change(`data[${props.index}].state`, true)}> 
+						<Field name={`data[${props.index}].startDate`} component={plainTextMonth} /> - <Field name={`data[${props.index}].endDate`} component={plainTextMonth} /> </div>
+					<div onClick={() =>  props.change(`data[${props.index}].state`, true)}> 
+						<Field name={`data[${props.index}].startDate`} component={plainTextYear} /> - <Field name={`data[${props.index}].endDate`} component={plainTextYear} /> </div>
 				</div>
 		);
 	}
 }
 
-const TheInput = function (props) {
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 
-	const projectStyle = {height: '85px'};
-	const dateButtonStyle = {float: 'right', marginRight: '10px'};
-	const state = props.theState, change = props.change
-	if (state) {
-		return   (
-			<div style={projectStyle}>
-				<Field name={props.name} component={textComponent} label={props.label} style={dateButtonStyle} />
-				    <Glyphicon glyph="floppy-disk" style={dateButtonStyle} />
-				    <Glyphicon glyph="remove" style={dateButtonStyle} />
-			</div>
-			);
-	} else {
-		return (
-			<div>a
-			</div>
-			)
-	}
-}
 
-const renderData = ({fields}) => (
-		<div>
-			{fields.getAll().map((data, index) => (
-					<div key={index}>
-				        <Field name={`data[${index}].project`} component={textComponent}  label="Project"/>
-					</div>
-					)
-				)}
+const plainTextYear = field => ( <span  className="location-month" > {field.input.value ? field.input.value.getFullYear() : "Year"} </span> )
 
-   		 <button type="button" onClick={() => fields.push({project: "asdasdasd"})}>Add Member</button>
-		</div>
-	)
+const plainTextMonth = field => ( <span className="location-year" > {field.input.value ?  monthNames[field.input.value.getMonth()] : "Month"}  </span> )
 
 DetailHistory = reduxForm({
   form: 'detailHistory',  // a unique identifier for this form
@@ -170,39 +139,7 @@ DetailHistory = reduxForm({
 const DetailHistoryContainer = connect(
   (state, props) => ({
 
-    	formValues: formValueSelector('detailHistory'),
-	    initialValues: {
-	    	data : [{
-	    		project: 'Project Name 1',
-	    		program: 'Program 1',
-	    		startDate:Date.now(),
-	    		endDate: Date.now(),
-	    		details: [
-	    			"details 1",
-	    			"details 2",
-	    			"details 3",
-	    			"details 4"
-	    		],
-	    		state: false
-
-	    	},{
-	    		project: 'Project Name 2',
-	    		program: 'Program 2',
-	    		startDate:Date.now(),
-	    		endDate: Date.now(),
-	    		details: [
-	    			"details 1",
-	    			"details 2",
-	    			"details 3",
-	    			"details 4"
-	    		],
-	    		state: false
-
-	    	}], 
-		    	asd: "asd",
-	    		startDate:Date.now(),
-	    		endDate: Date.now()
-    		}
+    	formValues: formValueSelector('detailHistory')
   })              
 )(DetailHistory)
 
