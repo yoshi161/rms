@@ -54,21 +54,28 @@ class DetailHistory extends Component {
 
     render() {
 
+        const { change } = this.props;
+
     	const style = {width: '100%', color: 'black', height: '1px', backgroundColor: 'purple'};
 
         return(
             <div className="content-container">
                 <h2 className="content-header">History</h2>
-				  <Grid>
+				<FieldArray name="data" component= { dataRender } changeDate={this.changeDateState.bind(this)} 
+					change={change}/>
+            </div>
+        );
+    }
+}
+
+const dataRender = (props) => (
+		<div>
+			{props.fields.getAll().map((data, index) => (
+				  <Grid key={index}>
 					<Row className="show-grid">
 						<Col sm={3} md={3} className="location-time">
-							<Dates changeDate={this.changeDateState.bind(this)} theState={this.state.dateState}/>
-     						<hr style={style} />
-							<TheInput  name='project' label='Project'
-								change={this.changeProjectState.bind(this)} 
-								theState={this.state.projectState}/> 
-							<TheInput name='program' label='Program'
-							 change={this.changeProgramState.bind(this)} theState={this.state.programState}/> 
+							<Dates changeDate={props.changeDate} 
+								change={props.change} theState={data.state} index={index}/>
 						</Col>
 						<Col sm={4} md={4} className="location-time">
 							Job Description
@@ -82,27 +89,21 @@ class DetailHistory extends Component {
 						</Col>
 					</Row>
 				  </Grid>
-				  <Grid>
-					<Row className="show-grid">
-						<Col sm={3} md={3} className="location-time">
-							<FieldArray name="data" component= { renderData } />
-                            <Field name="asd" component={textC} label="First Name"  />
-						</Col>
-					</Row>
-				  </Grid>
-            </div>
-        );
-    }
-}
+			))}
+
+   		 <button type="button" onClick={() => fields.push({project: "asdasdasd"})}>Add Member</button>
+		</div>
+	)
 
 
 
 const Dates = function (props) {
-
 	const dateButtonStyle = {float: 'right', marginRight: '10px'};
 
 	const state = props.theState
 	const changeDate = props.changeDate
+	const prop = props;
+	debugger
 	if (state) {	
 		return (
 				<div>
@@ -118,8 +119,8 @@ const Dates = function (props) {
 	} else {
 		return  (
 				<div>
-					<div className="location-month" onClick={changeDate}> November - February </div>
-					<div className="location-year" onClick={changeDate}> 2016-PRESENT </div>
+					<div className="location-month" onClick={() => props.change('data[0].state', true)}> November - February </div>
+					<div className="location-year" onClick={() => {debugger}}> 2016-PRESENT </div>
 				</div>
 		);
 	}
@@ -179,7 +180,8 @@ const DetailHistoryContainer = connect(
 	    			"details 2",
 	    			"details 3",
 	    			"details 4"
-	    		]
+	    		],
+	    		state: false
 
 	    	},{
 	    		project: 'Project Name 2',
@@ -191,12 +193,13 @@ const DetailHistoryContainer = connect(
 	    			"details 2",
 	    			"details 3",
 	    			"details 4"
-	    		]
+	    		],
+	    		state: false
 
 	    	}], 
-	    	asd: "asd",
-    		startDate:Date.now(),
-    		endDate: Date.now()
+		    	asd: "asd",
+	    		startDate:Date.now(),
+	    		endDate: Date.now()
     		}
   })              
 )(DetailHistory)
