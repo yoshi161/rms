@@ -25,6 +25,8 @@ class DetailHistory extends Component {
         	projectState: false,
         	programState: false,
         }
+
+        this.cobaOnClick = this.cobaOnClick.bind(this);
     }
 
     changeDateState() {
@@ -43,6 +45,16 @@ class DetailHistory extends Component {
     	this.setState({programState: newState})
     }
 
+    cobaOnClick(data, index) {
+    	debugger
+    	console.log('test');
+    	const newData = data.fields.get(data.index)
+    	newData.jobDesc.splice(index, 1);
+    	data.fields.remove(data.index)
+    	data.fields.insert(data.index, newData);
+    }
+
+
   
 
     render() {
@@ -51,21 +63,21 @@ class DetailHistory extends Component {
 
     	const style = {width: '100%', color: 'black', height: '1px', backgroundColor: 'purple'};
 
-
-
         return(
             <div className="content-container">
                 <h2 className="content-header">History</h2>
-				<FieldArray name="data" component= { dataRender } changeDate={this.changeDateState.bind(this)} 
-					change={change}/>
+				<FieldArray name="data" component= { dataRender } 
+					changeDate={this.changeDateState.bind(this)} 
+					cobaOnClick={this.cobaOnClick}	
+					{...this.props} change={change}/>
             </div>
         );
     }
 }
 
-const dataRender = (props) => {(
+const dataRender = (props) => (
 		<div>
-			{props.fields && props.fields.length > 0 ? props.fields.getAll().map((data, index) => (
+			{props.fields.getAll().map((data, index) => (
 				  <Grid key={index}>
 					<Row className="show-grid">
 						<Col sm={3} md={3} className="location-time">
@@ -73,23 +85,25 @@ const dataRender = (props) => {(
 								change={props.change} theState={data.state} index={index}/>
 						</Col>
 						<Col sm={4} md={4} className="location-time">
-							Job Description
-							<ul>
-								<li> Job Description 1</li>
-								<li> Job Description 2</li>
-								<li> Job Description 3</li>
-							</ul>
+							<JobDesc data={data} {...props} index={index} />
 						</Col>
 						<Col sm={4} md={2} >
 						</Col>
 					</Row>
 				  </Grid>
-			)) : <div></div>}
+			))}
 
-   		 <button type="button" onClick={() => props.fields.push({project: "asdasdasd"})}>Add Member</button>
+   		 <button type="button" onClick={() => props.fields.push({project: "asdasdasd", jobDesc:['a','b','c']})}>Add History</button>
 		</div>
-	)}
+	)
 
+const JobDesc = (props) => (
+		<ul>
+		{props.data.jobDesc.map((data, index) => (
+			<li onClick={() => props.cobaOnClick(props, index) }>{data}</li>
+			))}
+		</ul>
+	);
 
 
 const Dates = function (props) {
@@ -133,13 +147,46 @@ const plainTextMonth = field => ( <span className="location-year" > {field.input
 
 DetailHistory = reduxForm({
   form: 'detailHistory',  // a unique identifier for this form
+  destroyOnUnmount: false
 })(DetailHistory)
 
 // You have to connect() to any reducers that you wish to connect to yourself
 const DetailHistoryContainer = connect(
   (state, props) => ({
+    	formValues: formValueSelector('detailHistory'),
+	    initialValues: {
+	    	data : [ /*{
+	    		project: 'Project Name 1',
+	    		program: 'Program 1',
+	    		startDate: new Date(),
+	    		endDate: new Date(),
+	    		details: [
+	    			"details 1",
+	    			"details 2",
+	    			"details 3",
+	    			"details 4"
+	    		],
+	    		state: false
 
-    	formValues: formValueSelector('detailHistory')
+	    	},{
+	    		project: 'Project Name 2',
+	    		program: 'Program 2',
+	    		startDate: new Date(),
+	    		endDate:  new Date(),
+	    		details: [
+	    			"details 1",
+	    			"details 2",
+	    			"details 3",
+	    			"details 4"
+	    		],
+	    		state: false
+
+	    	}
+	    	*/], 
+		    	asd: "asd",
+	    		startDate: new Date(),
+	    		endDate:  new Date()
+    		}
   })              
 )(DetailHistory)
 

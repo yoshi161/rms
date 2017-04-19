@@ -20,10 +20,6 @@ import {hashHistory} from 'react-router';
 
 import {DETAILS, LOCATION} from '../util/paths';
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux'
-import { reduxForm, submit } from 'redux-form'
-
 class EmployeeTab extends Component {
 
     constructor(props, context) {
@@ -34,7 +30,8 @@ class EmployeeTab extends Component {
             viewMode: true,
             gradeErrorTextRequired: '',
             depErrorTextRequired: '',
-            path: null
+            path: null,
+            employeeTemp: null
         }
 
         const currentLocation = this.props.location.pathname;
@@ -76,10 +73,8 @@ class EmployeeTab extends Component {
         })
     }
 
-    handleUpdateEmployee(vals){
-       // const selector = formValueSelector('selectingFormValues');
-
-
+    handleUpdateEmployee(emps){
+        debugger
         if (    // Detail Employee
                 this.props.employee.firstName=="" || this.props.employee.lastName=="" || this.props.employee.gender==""
                 /*|| this.props.employee.dob=="" ||*/ || this.props.employee.phone=="" || this.props.employee.subDivision==""
@@ -139,8 +134,6 @@ class EmployeeTab extends Component {
     }
 
     handleCloseDeleteDialog() {
-        const id = this.props.employee.userName;
-        this.props.deleteEmployee(id);
         this.setState({
             deleteDialogIsOpen: false,
         });
@@ -188,12 +181,7 @@ class EmployeeTab extends Component {
         return rtn;
     }
 
-    submits() {  
-        this.props.submit('initializeFromState');
-    }
-
     render() {
-
         console.log("revisited employee tab");
         const actionsDeleteBtn = [
             <RaisedButton
@@ -218,8 +206,6 @@ class EmployeeTab extends Component {
 
         const onActiveEmployee = () => hashHistory.push('details');
 
-        const onActiveHistory = () => hashHistory.push('/details/history');
-
         const onActiveLocation = () => hashHistory.push('/details/location');
 
         const activeTab = () => {
@@ -229,34 +215,20 @@ class EmployeeTab extends Component {
         return(
             <div>
                 <Tabs initialSelectedIndex={this.state.path}>
-                   <Tab icon={<ActionAccountBox />} onActive={onActiveEmployee}>
-                        {React.cloneElement(this.props.children, {
-                             employee: this.props.employee,
-                            editEmployee: this.props.editEmployee,
-                            viewMode: this.state.viewMode,
-                            employees: this.props.employees,
-                            setCurrentEmployee: this.props.setCurrentEmployee,
-                            errorTextRequired: "This field is required",
-                            handleUpdateEmployee: this.handleUpdateEmployee
-
-                        })}
-                   </Tab>
-                   <Tab icon={<ActionHistory />} onActive={onActiveHistory}>
+                    <Tab icon={<ActionAccountBox />} onActive={onActiveEmployee}>
                         {React.cloneElement(this.props.children, {
                             employee: this.props.employee,
-                            editEmployee: this.props.editEmployee,
                             viewMode: this.state.viewMode,
                             employees: this.props.employees,
                             setCurrentEmployee: this.props.setCurrentEmployee,
-                            errorTextRequired: "This field is required",
-                            handleUpdateEmployee: this.handleUpdateEmployee
+                            errorTextRequired: "This field is required"
 
                         })}
-                   </Tab>
+                     </Tab>
                    <Tab icon={<CommunicationLocationOn/>}  onActive={onActiveLocation}>
                         {React.cloneElement(this.props.children, {
+                            employeeTemp: this.state.employeeTemp,
                             employee: this.props.employee,
-                            editEmployee: this.props.editEmployee,
                             viewMode: this.state.viewMode,
                             employees: this.props.employees,
                             setCurrentEmployee: this.props.setCurrentEmployee,
@@ -287,7 +259,7 @@ class EmployeeTab extends Component {
                             <RaisedButton
                                 label={"Save"}
                                 secondary={true}
-                                onTouchTap={this.submits.bind(this)}
+                                onTouchTap={this.handleUpdateEmployee.bind(this)}
                                 className="foot-btn"
                             />
                             <RaisedButton
@@ -321,11 +293,4 @@ class EmployeeTab extends Component {
     }
 }
 
-
-const mapDispatchToProps = function (dispatch) {
-  return bindActionCreators({
-    submit: submit
-  }, dispatch);
-};
-
-export default connect(null, mapDispatchToProps)(EmployeeTab);
+export default EmployeeTab;

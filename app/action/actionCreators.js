@@ -61,6 +61,13 @@ export function loadEmployees(employees) {
 	}
 } 
 
+export function editEmployeeData(employee) {
+	return {
+		type: 'EDIT_EMPLOYEE',
+		employee
+	}
+}
+
 export function editEmployee(id, employee) {
 	return {
 		type: 'EDIT_EMPLOYEE',
