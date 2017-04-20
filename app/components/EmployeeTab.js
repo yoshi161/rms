@@ -233,7 +233,8 @@ class EmployeeTab extends Component {
                             employees: this.props.employees,
                             setCurrentEmployee: this.props.setCurrentEmployee,
                             errorTextRequired: "This field is required",
-                            handleUpdateEmployee: this.handleUpdateEmployee
+                            handleUpdateEmployee: this.handleUpdateEmployee,
+                            employeeTemp: employeeTemp,
 
                         })}
                    </Tab>

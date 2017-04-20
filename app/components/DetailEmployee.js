@@ -19,11 +19,7 @@ class DetailEmployee extends Component {
             employee: Object.assign({}, props.employee) 
         }
     }
-	
-	
-	
-	
-
+//employeeTemp
     handleChangeValue(event, type) {
         var nextState = update(this.state, {
              employee: {[type]: {$set: event.target.value}}
