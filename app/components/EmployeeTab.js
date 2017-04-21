@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import $ from 'jquery';
 
+import update from 'react-addons-update';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Tabs, Tab} from 'material-ui/Tabs';
@@ -31,7 +32,7 @@ class EmployeeTab extends Component {
             gradeErrorTextRequired: '',
             depErrorTextRequired: '',
             path: null,
-            employeeTemp: null
+            employeeTemp: this.props.employee
         }
 
         const currentLocation = this.props.location.pathname;
@@ -48,11 +49,14 @@ class EmployeeTab extends Component {
 
         }
         this.handleUpdateEmployee = this.handleUpdateEmployee.bind(this);
+        this.setCurrentEmployeeTemp = this.setCurrentEmployeeTemp.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
         const currentLocation = nextProps.location.pathname;
-        
+
+        this.setState({employeeTemp: nextProps.employee});
+
         switch(currentLocation) {
             case DETAILS:
                 this.state.path = 0;
@@ -74,7 +78,6 @@ class EmployeeTab extends Component {
     }
 
     handleUpdateEmployee(emps){
-        debugger
         if (    // Detail Employee
                 this.props.employee.firstName=="" || this.props.employee.lastName=="" || this.props.employee.gender==""
                 /*|| this.props.employee.dob=="" ||*/ || this.props.employee.phone=="" || this.props.employee.subDivision==""
@@ -179,6 +182,12 @@ class EmployeeTab extends Component {
             })
         }
         return rtn;
+    } 
+
+    setCurrentEmployeeTemp(currentEmployee) {
+        this.setState({
+            employeeTemp: currentEmployee
+        })
     }
 
     render() {
@@ -221,7 +230,9 @@ class EmployeeTab extends Component {
                             viewMode: this.state.viewMode,
                             employees: this.props.employees,
                             setCurrentEmployee: this.props.setCurrentEmployee,
-                            errorTextRequired: "This field is required"
+                            errorTextRequired: "This field is required",
+                            employeeTemp: this.state.employeeTemp,
+                            setCurrentEmployeeTemp: this.setCurrentEmployeeTemp,
 
                         })}
                      </Tab>
@@ -234,7 +245,7 @@ class EmployeeTab extends Component {
                             setCurrentEmployee: this.props.setCurrentEmployee,
                             errorTextRequired: "This field is required",
                             handleUpdateEmployee: this.handleUpdateEmployee,
-                            employeeTemp: employeeTemp,
+                            employeeTemp: this.state.employeeTemp,
 
                         })}
                    </Tab>

@@ -21,27 +21,25 @@ class DetailEmployee extends Component {
     }
 //employeeTemp
     handleChangeValue(event, type) {
-        var nextState = update(this.state, {
-             employee: {[type]: {$set: event.target.value}}
+        debugger
+
+        var current = update(this.props, {
+             employeeTemp: {[type]: {$set: event.target.value}}
         });
 
-        this.setState(nextState);
+        this.props.setCurrentEmployeeTemp(current.employeeTemp);
     }
 
     handleChangeSelectValue(event, index, value, type) {
-        var nextState = update(this.state, {
-             employee: {[type]: {$set: value}}
+        update(this.props, {
+             employeeTemp: {[type]: {$set: value}}
         });
     }
 
     handleChangeDateValue(event, date, type) {
-        var nextState = update(this.state, {
-             employee: {[type]: {$set: date}}
+        update(this.props, {
+             employeeTemp: {[type]: {$set: date}}
         });
-    }
-
-    handleUpdateDetailEmployee(employee){
-        this.props.setCurrentEmployee(this.state.employee);
     }
 	
 	componentWillReceiveProps(nextProps, nextState){
@@ -62,46 +60,46 @@ class DetailEmployee extends Component {
             <div className="content-container">
                 <h2 className="content-header">Employee</h2>
                 <div className="content" >
-                    <input type="hidden" id="employeeId" value={this.state.employee.id}/>
+                    <input type="hidden" id="employeeId" value={this.props.employeeTemp.id}/>
                     <TextField
-                        value={this.state.employee.firstName}
+                        value={this.props.employeeTemp.firstName}
                         floatingLabelText="First Name"
-                        errorText={this.props.employee.firstName==""?this.props.errorTextRequired:""}
+                        errorText={this.props.employeeTemp.firstName==""?this.props.errorTextRequired:""}
                         onChange={event => this.handleChangeValue(event, 'firstName')}
                         disabled={this.props.viewMode}
                     /><br />
                     <TextField
-                        value={this.state.employee.lastName}
+                        value={this.props.employeeTemp.lastName}
                         floatingLabelText="Last Name"
-                        errorText={this.props.employee.lastName==""?this.props.errorTextRequired:""}
+                        errorText={this.props.employeeTemp.lastName==""?this.props.errorTextRequired:""}
                         onChange={event => this.handleChangeValue(event, 'lastName')}
                         disabled={this.props.viewMode}
                     /><br />
                     <SelectField
-                        value={this.state.employee.gender}
+                        value={this.props.employeeTemp.gender}
                         floatingLabelText="Gender"
-                        errorText={this.props.employee.gender==""?this.props.errorTextRequired:""}
+                        errorText={this.props.employeeTemp.gender==""?this.props.errorTextRequired:""}
                         onChange={(event, index, value) =>  this.handleChangeSelectValue(event, index, value, 'gender')}
                         disabled={this.props.viewMode} >
                         <MenuItem value={"M"} primaryText="Male" />
                         <MenuItem value={"F"} primaryText="Female" />
                     </SelectField><br />
                     <DatePicker
-                        value={this.state.employee.dob}
+                        value={this.props.employeeTemp.dob}
                         floatingLabelText="Date of Birth"
-                        errorText={this.props.employee.dob==""?this.props.errorTextRequired:""}
+                        errorText={this.props.employeeTemp.dob==""?this.props.errorTextRequired:""}
                         onChange={(event, date) =>  this.handleChangeDateValue(event, date, 'dob')}
                         autoOk={true}
                         disabled={this.props.viewMode}
                     />
                     <TextField
-                        value={this.state.employee.nationality}
+                        value={this.props.employeeTemp.nationality}
                         floatingLabelText="Nationality"
                         onChange={event => this.handleChangeValue(event, 'nationality')}
                         disabled={this.props.viewMode}
                     /><br />
                     <SelectField
-                        value={this.state.employee.maritalStatus}
+                        value={this.props.employeeTemp.maritalStatus}
                         floatingLabelText="Marital Status"
                         onChange={(event, index, value) =>  this.handleChangeSelectValue(event, index, value, 'maritalStatus')}
                         disabled={this.props.viewMode}>
@@ -109,7 +107,7 @@ class DetailEmployee extends Component {
                         <MenuItem value={"M"} primaryText="Married" />
                     </SelectField><br />
                     <TextField
-                        value={this.state.employee.phone}
+                        value={this.props.employeeTemp.phone}
                         floatingLabelText="Phone"
                         errorText={this.props.employee.phone==""?this.props.errorTextRequired:""}
                         onChange={event => this.handleChangeValue(event, 'phone')}
@@ -118,14 +116,14 @@ class DetailEmployee extends Component {
                 </div>
                 <div className="content">
                     <TextField
-                        value={this.state.employee.subDivision}
+                        value={this.props.employeeTemp.subDivision}
                         floatingLabelText="Sub Division"
                         errorText={this.props.employee.subDivision==""?this.props.errorTextRequired:""}
                         onChange={event => this.handleChangeValue(event, 'subDivision')}
                         disabled={this.props.viewMode}
                     /><br />
                     <SelectField
-                        value={this.state.employee.status}
+                        value={this.props.employeeTemp.status}
                         floatingLabelText="Status"
                         onChange={(event, index, value) =>  this.handleChangeSelectValue(event, index, value, 'status')}
                         disabled={this.props.viewMode} >
@@ -133,21 +131,21 @@ class DetailEmployee extends Component {
                         <MenuItem value={"P"} primaryText="Permanent" />
                     </SelectField><br />
                     <DatePicker
-                        value={this.state.employee.suspendDate}
+                        value={this.props.employeeTemp.suspendDate}
                         floatingLabelText="Suspend Date"
                         onChange={(event, date) =>  this.handleChangeDateValue(event, date, 'suspendDate')}
                         autoOk={true}
                         disabled={this.props.viewMode}
                     />
                     <DatePicker
-                        value={this.state.employee.hireDate}
+                        value={this.props.employeeTemp.hireDate}
                         floatingLabelText="Hire Date"
                         onChange={(event, date) =>  this.handleChangeDateValue(event, date, 'hireDate')}
                         autoOk={true}
                         disabled={this.props.viewMode}
                     />
                     <SelectField
-                        value={this.state.employee.grade}
+                        value={this.props.employeeTemp.grade}
                         floatingLabelText="Grade"
                         errorText={this.props.employee.grade==""?this.props.errorTextRequired:""}
                         onChange={(event, index, value) =>  this.handleChangeSelectValue(event, index, value, 'grade')}
@@ -155,7 +153,7 @@ class DetailEmployee extends Component {
                         {lookupGrade}
                     </SelectField><br />
                     <SelectField
-                        value={this.state.employee.division}
+                        value={this.props.employeeTemp.division}
                         floatingLabelText="Division"
                         errorText={this.props.employee.division==""?this.props.errorTextRequired:""}
                         onChange={(event, index, value) =>  this.handleChangeSelectValue(event, index, value, 'division')}
@@ -163,9 +161,9 @@ class DetailEmployee extends Component {
                         {lookupDivision}
                     </SelectField><br />
                     <TextField
-                        value={this.state.employee.email}
+                        value={this.props.employeeTemp.email}
                         floatingLabelText="Email"
-                        errorText={this.props.employee.email==""?this.props.errorTextRequired:""}
+                        errorText={this.props.employeeTemp.email==""?this.props.errorTextRequired:""}
                         onChange={event => this.handleChangeValue(event, 'email')}
                         disabled={this.props.viewMode}
                     /><br />
