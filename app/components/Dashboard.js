@@ -44,23 +44,14 @@ class Dashboard extends Component {
     }
 
     setEmployees(employees) {
-      /*  this.setState({
-            employees: employees
-        }) */
         this.props.editEmployee()
     }
 
     editEmployee(id, employee) {
-      /*  this.setState({
-            employees: employees
-        }) */
         this.props.updateEmployeeAsync(id, employee);
     }
 
     deleteEmployee(id) {
-      /*  this.setState({
-            employees: employees
-        }) */
         this.props.deleteEmployeeAsync(id);
     }
 
@@ -69,36 +60,6 @@ class Dashboard extends Component {
         this.setState({
             employee: currentEmployee
         })
-    }
-
-    componentWillMount() {
-        /*this.props.addEmployee(10,{
-                id: 'kholishul_as',
-                firstName: 'Kholishul I',
-                lastName: 'Aziz I',
-                gender: 'M',
-                dob: new Date(1991,3,1),
-                nationality: 'Indonesia',
-                maritalStatus: 'M',
-                phone: '+62857 3032 3302',
-                subDivision: 'Java Bootcamp',
-                status: 'P',
-                suspendDate: new Object,
-                hireDate: new Date(2013,10,18),
-                grade: 'SE2',
-                division: 'CDC',
-                email: 'kholishul.aziz@mitrais.com',
-                office: 'JOG',
-                active: true,
-                dependents: [
-                    {name: "Aziz's Wife", dob: new Date(1991,3,1), gender: 'F', type: 'W', active: true},
-                    {name: "Aziz's Jr", dob: new Date(2017,3,1), gender: 'M', type: 'C', active: true},
-                ],
-                gradeHistory:[
-                    {startDate: new Date(1991,3,1), endDate: new Date(1991,3,3), grade: 'SE1', devStage: 1},
-                    {startDate: new Date(1991,3,2), endDate: new Date(1991,4,3), grade: 'SE2', devStage: 4},
-                ]
-            }) */
     }
 
     componentDidMount () {
@@ -124,7 +85,7 @@ class Dashboard extends Component {
         }
     }
 
-    shouldComponentUpdate(nextProps){
+    componentWillReceiveProps(nextProps) {
        this.state.emp = nextProps.params.userName;
        this.filterEmployee (nextProps.employees);
        return true;

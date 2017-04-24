@@ -19,9 +19,8 @@ class DetailEmployee extends Component {
             employee: Object.assign({}, props.employee) 
         }
     }
-//employeeTemp
+
     handleChangeValue(event, type) {
-        debugger
 
         var current = update(this.props, {
              employeeTemp: {[type]: {$set: event.target.value}}

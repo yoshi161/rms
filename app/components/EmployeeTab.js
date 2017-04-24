@@ -54,7 +54,6 @@ class EmployeeTab extends Component {
 
     componentWillReceiveProps(nextProps) {
         const currentLocation = nextProps.location.pathname;
-
         this.setState({employeeTemp: nextProps.employee});
 
         switch(currentLocation) {
@@ -92,14 +91,8 @@ class EmployeeTab extends Component {
                     // required fields are not filled yet
                     this.handleOpenValidationDialog();
         } else {
-         //   var index = this.props.employees.map( (employee) => employee.id ).indexOf($("#employeeId").val())
-            //console.log("-- Update Employee["+index+"] "+ $("#employeeId").val() +" --");
-            //console.log(this.props.employee);
-           // var employees = this.props.employees;
-          //  employees[index] = (this.props.employee.id, this.props.employee);;
-           // this.props.setEmployees(employees);
            this.props.editEmployee(this.props.employee.id, 
-                this.props.employee);
+                this.state.employeeTemp);
             this.setState({
                 viewMode: true,
                 gradeErrorTextRequired: '',
