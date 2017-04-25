@@ -28,8 +28,9 @@ function employees (state=initialState, action) {
 			return Immutable.asMutable(editEmployee(state, action));
 		case 'LOAD_EMPLOYEES':
 			return Immutable.asMutable([...action.employees]);
-		case 'DELETE_EMPLOYEES':
-			let index = state.findIndex((x) => x.name === action.id); 
+		case 'DELETE_EMPLOYEE':
+			debugger
+			let index = state.findIndex((x) => x.id === action.id); 
 			  return Immutable.asMutable([
 			    ...state.slice(0, index),
 			    ...state.slice(index + 1)

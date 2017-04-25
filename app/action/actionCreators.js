@@ -1,6 +1,6 @@
 
 function fetching() {
-  return fetch('/api/emfloyees', {
+  return fetch('/api/employees', {
   	  method: 'get'
 	});
 }
@@ -10,7 +10,7 @@ function updating(content) {
   var copy = Object.assign({}, content);
   delete copy.id;
   const theBody = JSON.stringify(copy);
-  return fetch('/api/emfloyees', {
+  return fetch('/api/employees', {
      headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -24,7 +24,7 @@ function adding(content) {
   content.userName = content.id;
   var copy = Object.assign({}, content);
   delete copy.id;
-  return fetch('/api/emfloyees', {
+  return fetch('/api/employees', {
      headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ function adding(content) {
 }
 
 function deleting(id) {
-  return fetch('/api/emfloyees', {
+  return fetch('/api/employees', {
      headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'

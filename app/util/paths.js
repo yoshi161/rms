@@ -1,2 +1,2 @@
-export const DETAILS = '/details';
-export const LOCATION = '/details/location';
+export const DETAILS = 'details';
+export const LOCATION = 'locations';

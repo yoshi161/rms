@@ -25,48 +25,48 @@ class EmployeeTab extends Component {
 
     constructor(props, context) {
         super(props, context);
+
         this.state = {
             deleteDialogIsOpen: false,
             validationDialogIsOpen: false,
             viewMode: true,
             gradeErrorTextRequired: '',
             depErrorTextRequired: '',
-            path: null,
+            path: this.defineActiveTab(this.props),
             employeeTemp: this.props.employee
         }
 
-        const currentLocation = this.props.location.pathname;
-        
-        switch(currentLocation) {
-            case DETAILS:
-                this.state.path = 0;
-                break;
-            case LOCATION:
-                this.state.path = 1;
-                break;
-            default:
-                this.state.path = 0;
-
-        }
+        this.defineActiveTab = this.defineActiveTab.bind(this);
         this.handleUpdateEmployee = this.handleUpdateEmployee.bind(this);
         this.setCurrentEmployeeTemp = this.setCurrentEmployeeTemp.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
+    defineActiveTab(nextProps) {
         const currentLocation = nextProps.location.pathname;
-        this.setState({employeeTemp: nextProps.employee});
+        const parsedPath = currentLocation.split("/");
+        const location = parsedPath[parsedPath.length-1];
+        let path = 0;
 
-        switch(currentLocation) {
+        switch(location) {
             case DETAILS:
-                this.state.path = 0;
+                path = 0;
                 break;
             case LOCATION:
-                this.state.path = 1;
+                path = 1;
                 break;
             default:
-                this.state.path = 0;
+                path = 0;
 
         }
+
+        return path;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const path = this.defineActiveTab(nextProps);
+
+
+        this.setState({employeeTemp: nextProps.employee, path: path});
 
     }
 
@@ -111,14 +111,9 @@ class EmployeeTab extends Component {
     }
 
     handleDeleteEmployee(){
-        var index = this.props.employees.map( (employee) => employee.id ).indexOf($("#employeeId").val())
-        //console.log("-- Delete Employee["+index+"] "+ $("#employeeId").val() +" --");
-        var employees = this.props.employees
-        employees.splice( index, 1 );
-        if (employees.length > 0){
-            this.props.setCurrentEmployee(employees[0]);
-        }
-        this.handleCloseDeleteDialog();
+       this.props.deleteEmployee(this.state.employeeTemp.id);
+       this.handleCloseDeleteDialog();
+       hashHistory.push('/details'); 
     }
 
     handleOpenDeleteDialog() {
@@ -208,10 +203,10 @@ class EmployeeTab extends Component {
 
         const onActiveEmployee = () => hashHistory.push('details');
 
-        const onActiveLocation = () => hashHistory.push('/details/location');
-
-        const activeTab = () => {
-
+        const onActiveLocation = () => {
+          const employeeId = this.state.employeeTemp.id;
+          const path = '/details/'+employeeId+'/locations';
+          hashHistory.push(path);  
         }
 
         return(
@@ -231,14 +226,14 @@ class EmployeeTab extends Component {
                      </Tab>
                    <Tab icon={<CommunicationLocationOn/>}  onActive={onActiveLocation}>
                         {React.cloneElement(this.props.children, {
-                            employeeTemp: this.state.employeeTemp,
                             employee: this.props.employee,
                             viewMode: this.state.viewMode,
                             employees: this.props.employees,
+                            editEmployee: this.props.editEmployee,
                             setCurrentEmployee: this.props.setCurrentEmployee,
                             errorTextRequired: "This field is required",
-                            handleUpdateEmployee: this.handleUpdateEmployee,
                             employeeTemp: this.state.employeeTemp,
+                            setCurrentEmployeeTemp: this.setCurrentEmployeeTemp,
 
                         })}
                    </Tab>

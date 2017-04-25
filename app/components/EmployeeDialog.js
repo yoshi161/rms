@@ -47,6 +47,7 @@ class EmployeeDialog extends Component {
 
         this.setNewEmployee = this.setNewEmployee.bind(this);
         this.getStepContent = this.getStepContent.bind(this);
+        this.setCurrentEmployeeTemp = this.setCurrentEmployeeTemp.bind(this);
     }
 
 
@@ -54,6 +55,12 @@ class EmployeeDialog extends Component {
     setNewEmployee(newEmployee) {
         this.setState({
             employee: newEmployee
+        })
+    }
+
+    setCurrentEmployeeTemp(currentEmployee) {
+        this.setState({
+            employee: currentEmployee
         })
     }
 
@@ -99,10 +106,10 @@ class EmployeeDialog extends Component {
             case 0:
                 return (
                     <DetailEmployee
-                        employee={this.state.employee}
+                        employeeTemp={this.state.employee}
                         viewMode={false}
                         errorTextRequired={this.state.errorTextRequired}
-                        setCurrentEmployee={this.setNewEmployee.bind(this)}
+                        setCurrentEmployeeTemp = {this.setCurrentEmployeeTemp}
                     />
                 );
             case 1:

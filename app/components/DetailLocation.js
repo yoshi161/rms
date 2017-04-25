@@ -19,17 +19,11 @@ class DetailLocation extends Component {
         this.state = {
             lookupOffice: LookupData.office,
 			viewMode: props.viewMode,
-            employees:[{
-                office: 'SBY',
-                address: "aaaaaaaaaaa",
-            },{
-                office: 'SBY',
-                address: "bbbbbbbbb"
-            }],
-            employee: {
-                office: "",
-                address: "",
-                index: null
+            locationTemp: {
+                from: new Date(),
+                to: new Date(),
+                location: "JOG",
+                address: "new address",
             }
         }
 		this.changeEdit = this.changeEdit.bind(this);
@@ -38,29 +32,27 @@ class DetailLocation extends Component {
 		this.create = this.create.bind(this);
 		this.delete2 = this.delete2.bind(this);
         this.locationAddressInput = this.locationAddressInput.bind(this);
-       // this.handleChangeValue = this.handleChangeValue.bind(this);
     }
 
-    componentWillMount() {
-    }
 
     save() {
-
         this.props.handleUpdateEmployee();
         this.setState({
             viewMode: true
         });
-}
+    }
 
     create() {
-        this.setState({
-            viewMode: false,
-            employee: {
-                office: "",
-                address: ""
-            },
-            model: "new"
+        const current = update(this.props, {
+            employeeTemp: {
+                locations: {$push: [this.state.locationTemp]}
+            }
         });
+
+        this.props.setCurrentEmployeeTemp(current.employeeTemp);
+
+        this.props.editEmployee(current.employeeTemp.id, 
+            current.employeeTemp);
     }
 
     delete2(index) {
@@ -71,29 +63,29 @@ class DetailLocation extends Component {
     }
 
     handleChangeValue(event, type) {
-        var a = update(this.props, {
-             employee: {[type]: {$set: event.target.value}}
+        var propsTemp = update(this.props, {
+             employeeTemp: {[type]: {$set: event.target.value}}
         });
 
-        this.props.setCurrentEmployee(a.employee);
+        this.props.setCurrentEmployeeTemp(propsTemp);
     }
 
     handleChangeSelectValue(event, index, value, type) {
-        var nextState = update(this.props, {
-             employee: {[type]: {$set: value}}
+        debugger
+        var locationsTemp = this.props.employeeTemp.locations;
+        locationsTemp[index][type] = value; 
+        var propsTemp = update(this.props.employeeTemp, {
+             locations: {$set: locationsTemp} 
+             
         });
-        this.props.setCurrentEmployee(nextState.employee);
+        this.props.setCurrentEmployeeTemp(propsTemp); 
     }
 
     handleChangeDateValue(event, date, type) {
-        var nextState = update(this.props, {
-             employee: {[type]: {$set: date}}
+        var propsTemp = update(this.props, {
+             employeeTemp: {[type]: {$set: date}}
         });
-        this.props.setCurrentEmployee(nextState.employee);
-    }
-
-    setNewEmployee() {
-
+        this.props.setCurrentEmployeeTemp(propsTemp);
     }
 	
 	changeEdit(index) {
@@ -143,14 +135,6 @@ class DetailLocation extends Component {
         var lookupOffice = this.state.lookupOffice.map ( office =>
             <MenuItem key={office.code} value={office.code} primaryText={office.desc} />
         );
-/*
-        var actions = (
-
-                <div>
-                    <Glyphicon glyph="pencil" className="location-action" onClick={this.changeEdit} />
-                    <Glyphicon glyph="trash" className="location-action" onClick={this.delete2(index)} />
-                </div>
-        ); */
 
 		var actions = function(event, index, asd) {
 
@@ -158,7 +142,6 @@ class DetailLocation extends Component {
 		    var idx = index;
             return (
                 <div>
-                    <Glyphicon glyph="pencil" className="location-action" onClick={() => that.changeEdit(idx)} />
                     <Glyphicon glyph="trash" className="location-action" onClick={() => that.delete2(idx)} />
                 </div>
             );
@@ -174,62 +157,36 @@ class DetailLocation extends Component {
             return <div className="location-address">{emp.address}</div>
 		}
 
-        var a = [this.props.employees[0]];
-		var asdf = a.map((emp, index) =>
+        var a = this.props.employeeTemp;
+		var mapped = a.locations.map((emp, idx) =>
             (
-				  <Grid key={index} >
+				  <Grid key={idx} >
 					<Row className="show-grid">
 						<Col sm={3} md={3} className="location-time">
-							<div className="location-month"> November - February </div>
+							<div className="location-month"> November - February 
+                            {idx}</div>
 							<div className="location-year"> 2016-PRESENT </div>
 						</Col>
 						<Col sm={4} md={4} >
 							<SelectField
-								value={emp.office}
+								value={emp.location}
 								floatingLabelText="Office"
 								errorText={emp.office==""?this.props.errorTextRequired:""}
-								onChange={(event, index, value) =>  this.handleChangeSelectValue(event, index, value, 'office')} disabled={this.state.viewMode} >
+								onChange={(event, idx, value) =>  this.handleChangeSelectValue(event, idx, value, 'location')} 
+                                disabled={this.props.viewMode} >
 								{lookupOffice}
 							</SelectField>
 							<div> Address </div>
-							{ this.state.viewMode ? locationField(emp) : null }
-							{ !this.state.viewMode ? this.locationAddressInput(emp) : null }
+							{ this.props.viewMode ? locationField(emp) : null }
+							{ !this.props.viewMode ? this.locationAddressInput(emp) : null }
 						</Col>
 						<Col sm={4} md={2} >
-							{ this.state.viewMode ? actions(event, index, this) : null }
-							{ !this.state.viewMode ? popupActions : null }
+							{ this.props.viewMode ? actions(event, idx, this) : null }
+							{ !this.props.viewMode ? popupActions : null }
 						</Col>
 					</Row>
 				  </Grid>
             )
-		);
-
-		var a = (
-              <Grid>
-                <Row className="show-grid">
-                    <Col sm={3} md={3} className="location-time">
-                        <div className="location-month"> November - February </div>
-                        <div className="location-year"> 2016-PRESENTs </div>
-                    </Col>
-                    <Col sm={4} md={4} >
-                        <SelectField
-                            value={this.props.employee.office}
-                            floatingLabelText="Office"
-                            errorText={this.props.employee.office==""?this.props.errorTextRequired:""}
-                            onChange={(event, index, value) =>  this.handleChangeSelectValue(event, index, value, 'office')} disabled={this.state.viewMode} >
-                            {lookupOffice}
-                        </SelectField>
-                        <div> Address </div>
-                        { this.state.viewMode ? locationField(this.props.employee) : null }
-                        { !this.state.viewMode ? this.locationAddressInput(this.props.employee) : null }
-
-                        <input type="hidden" name="index" value={this.state.employee.index} />
-                    </Col>
-                    <Col sm={4} md={2} >
-                        { !this.state.viewMode ? popupActions : null }
-                    </Col>
-                </Row>
-              </Grid>
 		);
 
 
@@ -237,18 +194,8 @@ class DetailLocation extends Component {
             <div className="content-container">
                 <h2 className="content-header">Location</h2>
                 <div className="content" style={modalStyle}>
-                    {asdf}
+                    {mapped}
                 </div>
-                <Dialog
-                    open={!this.state.viewMode}
-                    title="Location"
-                    contentStyle={{width: "50%", maxWidth: "none", height:"65%", maxHeight:"none"}}
-                    autoScrollBodyContent={true}
-                    onRequestClose={this.handleCloseDialog.bind(this)}>
-                    <div className="content-dialog" style={modalStyle}>
-                        {a}
-                    </div>
-                </Dialog>
                 <div className="location-float-button">
                     <FloatingActionButton secondary={true} onClick={this.create}>
                       <ContentAdd />

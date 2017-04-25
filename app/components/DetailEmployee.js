@@ -30,15 +30,19 @@ class DetailEmployee extends Component {
     }
 
     handleChangeSelectValue(event, index, value, type) {
-        update(this.props, {
+        var current = update(this.props, {
              employeeTemp: {[type]: {$set: value}}
         });
+
+        this.props.setCurrentEmployeeTemp(current.employeeTemp);
     }
 
     handleChangeDateValue(event, date, type) {
-        update(this.props, {
+        var current = update(this.props, {
              employeeTemp: {[type]: {$set: date}}
         });
+
+        this.props.setCurrentEmployeeTemp(current.employeeTemp);
     }
 	
 	componentWillReceiveProps(nextProps, nextState){
@@ -108,7 +112,7 @@ class DetailEmployee extends Component {
                     <TextField
                         value={this.props.employeeTemp.phone}
                         floatingLabelText="Phone"
-                        errorText={this.props.employee.phone==""?this.props.errorTextRequired:""}
+                        errorText={this.props.employeeTemp.phone==""?this.props.errorTextRequired:""}
                         onChange={event => this.handleChangeValue(event, 'phone')}
                         disabled={this.props.viewMode}
                     /><br />
@@ -117,7 +121,7 @@ class DetailEmployee extends Component {
                     <TextField
                         value={this.props.employeeTemp.subDivision}
                         floatingLabelText="Sub Division"
-                        errorText={this.props.employee.subDivision==""?this.props.errorTextRequired:""}
+                        errorText={this.props.employeeTemp.subDivision==""?this.props.errorTextRequired:""}
                         onChange={event => this.handleChangeValue(event, 'subDivision')}
                         disabled={this.props.viewMode}
                     /><br />
@@ -146,7 +150,7 @@ class DetailEmployee extends Component {
                     <SelectField
                         value={this.props.employeeTemp.grade}
                         floatingLabelText="Grade"
-                        errorText={this.props.employee.grade==""?this.props.errorTextRequired:""}
+                        errorText={this.props.employeeTemp.grade==""?this.props.errorTextRequired:""}
                         onChange={(event, index, value) =>  this.handleChangeSelectValue(event, index, value, 'grade')}
                         disabled={this.props.viewMode} >
                         {lookupGrade}
@@ -154,7 +158,7 @@ class DetailEmployee extends Component {
                     <SelectField
                         value={this.props.employeeTemp.division}
                         floatingLabelText="Division"
-                        errorText={this.props.employee.division==""?this.props.errorTextRequired:""}
+                        errorText={this.props.employeeTemp.division==""?this.props.errorTextRequired:""}
                         onChange={(event, index, value) =>  this.handleChangeSelectValue(event, index, value, 'division')}
                         disabled={this.props.viewMode} >
                         {lookupDivision}

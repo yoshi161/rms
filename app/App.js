@@ -45,7 +45,7 @@ const routing = (
 			   </Route>
 				<Route  path="details/:userName"  component={EmployeeTab}>
 					 <IndexRoute component={DetailEmployee} />
-					 <Route path="location" component={DetailLocation} />
+					 <Route path="locations" component={DetailLocation} />
 					 <Route path="history" component={DetailHistory} />
 			   </Route>
 			</Route>

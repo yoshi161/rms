@@ -26,9 +26,28 @@ class Dashboard extends Component {
         this.state = {
             employees: null,
             employee: {
-                firstName: "",
-                lastName: "",
-                dob: ""
+                 id: '',
+                 firstName: '',
+                 lastName: '',
+                 gender: '',
+                 dob: new Object,
+                 nationality: '',
+                 maritalStatus: '',
+                 phone: '',
+                 subDivision: '',
+                 status: '',
+                 suspendDate: new Object,
+                 hireDate: new Object,
+                 grade: '',
+                 division: '',
+                 email: '',
+                 office: '',
+                 active: true,
+                 dependents: [],
+                 gradeHistory:[
+                    {startDate: new Object, endDate: new Object, grade: '', devStage: 0},
+                 ],
+                 locations: []
             },
             current: null,
             lookupGrade: LookupData.grade,
