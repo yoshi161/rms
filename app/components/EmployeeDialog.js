@@ -42,6 +42,7 @@ class EmployeeDialog extends Component {
                  gradeHistory:[
                     {startDate: new Object, endDate: new Object, grade: '', devStage: 0},
                  ],
+                 locations: [],
             }
         }
 
@@ -97,6 +98,7 @@ class EmployeeDialog extends Component {
                  gradeHistory:[
                      {startDate: new Object, endDate: new Object, grade: '', devStage: 0},
                  ],
+                 locations: [],
             }
         });
     }

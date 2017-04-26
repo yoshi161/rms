@@ -63,7 +63,6 @@ class EmployeeTab extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        debugger
         const path = this.defineActiveTab(nextProps);
         this.setState({employeeTemp: JSON.parse(JSON.stringify(nextProps.employee)), path: path});
 

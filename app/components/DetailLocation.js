@@ -7,11 +7,17 @@ import _  from 'lodash';
 import Dialog from 'material-ui/Dialog';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
+import DatePicker from 'material-ui/DatePicker';
 import SelectField from 'material-ui/SelectField';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 
 import LookupData from '../data/LookupData';
+
+
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 
 class DetailLocation extends Component {
 
@@ -54,7 +60,7 @@ class DetailLocation extends Component {
 
     deleteLocation(index) {
         var locationsTemp = _.cloneDeep(this.props.employeeTemp.locations);
-        locationsTemp.splice(index,1); 
+        locationsTemp.splice(index, 1); 
         var propsTemp = update(this.props.employeeTemp, {
              locations: {$set: locationsTemp} 
              
@@ -125,6 +131,44 @@ class DetailLocation extends Component {
 
     }
 
+    locationDateInput (emp, idx) {
+        const from = new Date(emp.from);
+        const to = new Date(emp.to);
+        return (
+                <Col sm={3} md={3} className="location-time">
+                    <DatePicker
+                        value={from}
+                        floatingLabelText="From"
+                        errorText={this.props.employeeTemp.from==""?this.props.errorTextRequired:""}
+                        onChange={(object, value) => this.handleChangeValue(object, value, 'from', idx)}
+                        autoOk={true}
+                    />
+                    <DatePicker
+                        value={to}
+                        floatingLabelText="To"
+                        errorText={this.props.employeeTemp.from==""?this.props.errorTextRequired:""}
+                        onChange={(object, value) => this.handleChangeValue(object, value, 'to', idx)}
+                        autoOk={true}
+                    />
+                </Col>
+            );
+    }
+
+    locationDateDisable (emp) {
+        const monthFrom = monthNames[new Date(emp.from).getMonth()];
+        const yearFrom = new Date(emp.from).getFullYear();
+        const monthTo = monthNames[new Date(emp.to).getMonth()];
+        const yearTo = new Date(emp.to).getFullYear();
+        return (
+                <Col sm={3} md={3} className="location-time">
+                    <div className="location-month"> {monthFrom} - {monthTo} </div>
+                    <div className="location-year"> {yearFrom} - {yearTo} </div>
+                </Col>
+            );
+
+    }
+                        
+
     render() {
         var modalStyle = {
             width: 800
@@ -154,10 +198,7 @@ class DetailLocation extends Component {
             (
 				  <Grid key={idx} >
 					<Row className="show-grid">
-						<Col sm={3} md={3} className="location-time">
-							<div className="location-month"> November - February </div>
-							<div className="location-year"> 2016-PRESENT </div>
-						</Col>
+                        { this.props.viewMode ? this.locationDateDisable(emp) : this.locationDateInput(emp, idx) }
 						<Col sm={4} md={4} >
 							<SelectField
 								value={emp.location}
@@ -168,8 +209,7 @@ class DetailLocation extends Component {
 								{lookupOffice}
 							</SelectField>
 							<div> Address </div>
-							{ this.props.viewMode ? locationField(emp) : null }
-							{ !this.props.viewMode ? this.locationAddressInput(emp, idx) : null }
+							{ this.props.viewMode ? locationField(emp) : this.locationAddressInput(emp, idx) }
 						</Col>
 						<Col sm={4} md={2} >
 							{ !this.props.viewMode ? actionButton(idx, this) : null  }
