@@ -46,7 +46,7 @@ class DetailEmployee extends Component {
     }
 	
 	componentWillReceiveProps(nextProps, nextState){
-		this.setState({employee: nextProps.employee});
+		this.setState({employee: nextProps.employeeTemp});
 		return true;
 	}
     

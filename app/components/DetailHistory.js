@@ -46,7 +46,6 @@ class DetailHistory extends Component {
     }
 
     cobaOnClick(data, index) {
-    	debugger
     	console.log('test');
     	const newData = data.fields.get(data.index)
     	newData.jobDesc.splice(index, 1);

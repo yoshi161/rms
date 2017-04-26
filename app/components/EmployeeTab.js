@@ -33,7 +33,7 @@ class EmployeeTab extends Component {
             gradeErrorTextRequired: '',
             depErrorTextRequired: '',
             path: this.defineActiveTab(this.props),
-            employeeTemp: this.props.employee
+            employeeTemp: JSON.parse(JSON.stringify(this.props.employee))
         }
 
         this.defineActiveTab = this.defineActiveTab.bind(this);
@@ -63,10 +63,9 @@ class EmployeeTab extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        debugger
         const path = this.defineActiveTab(nextProps);
-
-
-        this.setState({employeeTemp: nextProps.employee, path: path});
+        this.setState({employeeTemp: JSON.parse(JSON.stringify(nextProps.employee)), path: path});
 
     }
 
@@ -102,11 +101,9 @@ class EmployeeTab extends Component {
     }
 
     handleCancel() {
-        var index = this.props.employees.map( (employee) => employee.id ).indexOf($("#employeeId").val())
-        var employees = this.props.employees;
-        this.props.setCurrentEmployee(employees[index]);
         this.setState({
-            viewMode: true
+            viewMode: true,
+            employeeTemp: JSON.parse(JSON.stringify(this.props.employee))
         })
     }
 
@@ -174,7 +171,7 @@ class EmployeeTab extends Component {
 
     setCurrentEmployeeTemp(currentEmployee) {
         this.setState({
-            employeeTemp: currentEmployee
+            employeeTemp: Object.assign({}, currentEmployee) 
         })
     }
 
@@ -211,8 +208,8 @@ class EmployeeTab extends Component {
 
         return(
             <div>
-                <Tabs initialSelectedIndex={this.state.path}>
-                    <Tab icon={<ActionAccountBox />} onActive={onActiveEmployee}>
+                <Tabs initialSelectedIndex={0} value={this.state.path}>
+                    <Tab icon={<ActionAccountBox />} onActive={onActiveEmployee} value={0}>
                         {React.cloneElement(this.props.children, {
                             employee: this.props.employee,
                             viewMode: this.state.viewMode,
@@ -224,9 +221,8 @@ class EmployeeTab extends Component {
 
                         })}
                      </Tab>
-                   <Tab icon={<CommunicationLocationOn/>}  onActive={onActiveLocation}>
+                   <Tab icon={<CommunicationLocationOn/>}  onActive={onActiveLocation} value={1}>
                         {React.cloneElement(this.props.children, {
-                            employee: this.props.employee,
                             viewMode: this.state.viewMode,
                             employees: this.props.employees,
                             editEmployee: this.props.editEmployee,
