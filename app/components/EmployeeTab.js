@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import $ from 'jquery';
+import _  from 'lodash';
 
 import update from 'react-addons-update';
 import Dialog from 'material-ui/Dialog';
@@ -19,7 +20,7 @@ import DetailLocation from './DetailLocation'
 
 import {hashHistory} from 'react-router';
 
-import {DETAILS, LOCATION} from '../util/paths';
+import {DETAILS, LOCATION, HISTORY} from '../util/paths';
 
 class EmployeeTab extends Component {
 
@@ -51,8 +52,11 @@ class EmployeeTab extends Component {
             case DETAILS:
                 path = 0;
                 break;
-            case LOCATION:
+            case HISTORY:
                 path = 1;
+                break;
+            case LOCATION:
+                path = 2;
                 break;
             default:
                 path = 0;
@@ -170,8 +174,8 @@ class EmployeeTab extends Component {
 
     setCurrentEmployeeTemp(currentEmployee) {
         this.setState({
-            employeeTemp: Object.assign({}, currentEmployee) 
-        })
+            employeeTemp: _.cloneDeep(currentEmployee) 
+        });
     }
 
     render() {
@@ -197,18 +201,21 @@ class EmployeeTab extends Component {
             />,
         ];
 
-        const onActiveEmployee = () => hashHistory.push('details');
+        const onActiveTab = (tab) => {
+            const employeeId = this.state.employeeTemp.id;
+            let path = '/details/'+employeeId;
 
-        const onActiveLocation = () => {
-          const employeeId = this.state.employeeTemp.id;
-          const path = '/details/'+employeeId+'/locations';
-          hashHistory.push(path);  
-        }
+            if (tab) {
+                path = path.concat('/'+tab);
+            } 
+
+            hashHistory.push(path);
+        } 
 
         return(
             <div>
                 <Tabs initialSelectedIndex={0} value={this.state.path}>
-                    <Tab icon={<ActionAccountBox />} onActive={onActiveEmployee} value={0}>
+                    <Tab icon={<ActionAccountBox />} onActive={() => onActiveTab()} value={0}>
                         {React.cloneElement(this.props.children, {
                             employee: this.props.employee,
                             viewMode: this.state.viewMode,
@@ -220,7 +227,19 @@ class EmployeeTab extends Component {
 
                         })}
                      </Tab>
-                   <Tab icon={<CommunicationLocationOn/>}  onActive={onActiveLocation} value={1}>
+                   <Tab icon={<ActionHistory/>}  onActive={() => onActiveTab(HISTORY)} value={1}>
+                        {React.cloneElement(this.props.children, {
+                            viewMode: this.state.viewMode,
+                            employees: this.props.employees,
+                            editEmployee: this.props.editEmployee,
+                            setCurrentEmployee: this.props.setCurrentEmployee,
+                            errorTextRequired: "This field is required",
+                            employeeTemp: this.state.employeeTemp,
+                            setCurrentEmployeeTemp: this.setCurrentEmployeeTemp,
+
+                        })}
+                   </Tab>
+                   <Tab icon={<CommunicationLocationOn/>}  onActive={() => onActiveTab(LOCATION)} value={2}>
                         {React.cloneElement(this.props.children, {
                             viewMode: this.state.viewMode,
                             employees: this.props.employees,

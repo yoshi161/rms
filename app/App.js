@@ -40,13 +40,11 @@ const routing = (
 			<Route component={App} >
 				<Route  path="details" component={EmployeeTab}>
 					 <IndexRoute component={DetailEmployee} />
-					 <Route path="location" component={DetailLocation} />
-					 <Route path="history" component={DetailHistory} />
 			   </Route>
 				<Route  path="details/:userName"  component={EmployeeTab}>
 					 <IndexRoute component={DetailEmployee} />
 					 <Route path="locations" component={DetailLocation} />
-					 <Route path="history" component={DetailHistory} />
+					 <Route path="histories" component={DetailHistory} />
 			   </Route>
 			</Route>
 			<Route path='/404' component={NotFound} />

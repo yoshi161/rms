@@ -33,10 +33,9 @@ class DetailLocation extends Component {
                 address: "new address",
             }
         }
-		this.changeEdit = this.changeEdit.bind(this);
-		this.dataChanged = this.dataChanged.bind(this);
+        
 		this.save = this.save.bind(this);
-		this.create = this.create.bind(this);
+		this.add = this.add.bind(this);
         this.locationAddressInput = this.locationAddressInput.bind(this);
     }
 
@@ -48,7 +47,7 @@ class DetailLocation extends Component {
         });
     }
 
-    create() {
+    add() {
         const current = update(this.props, {
             employeeTemp: {
                 locations: {$push: [Object.assign({}, this.state.locationTemp)]}
@@ -93,31 +92,6 @@ class DetailLocation extends Component {
              employeeTemp: {[type]: {$set: date}}
         });
         this.props.setCurrentEmployeeTemp(propsTemp);
-    }
-	
-	changeEdit(index) {
-        var a = this.state.employees[index];
-        a.index = index;
-    //    a.address = index;
-		this.setState({viewMode: false,
-		                employee: a,
-		                model: "edit"});
-	}
-
-	dataChanged(event, type) {
-	    var value = event.target.value;
-        update(this.props, {
-            employee: {
-                [type]: {$set: value}
-            }
-        });
-	}
-
-    handleCloseDialog() {
-        this.setState({
-            viewMode: true,
-            model:""
-        });
     }
 
     locationAddressInput (emp, idx) {
@@ -194,7 +168,7 @@ class DetailLocation extends Component {
 		}
 
         var empTemp = this.props.employeeTemp;
-		var mapped =  empTemp. locations ? empTemp.locations.map((emp, idx) =>
+		var maps =  empTemp. locations ? empTemp.locations.map((emp, idx) =>
             (
 				  <Grid key={idx} >
 					<Row className="show-grid">
@@ -221,7 +195,7 @@ class DetailLocation extends Component {
 
         const addButton = (
                 <div className="location-float-button">
-                    <FloatingActionButton secondary={true} onClick={this.create}>
+                    <FloatingActionButton secondary={true} onClick={this.add}>
                       <ContentAdd />
                     </FloatingActionButton>
                 </div>
@@ -232,7 +206,7 @@ class DetailLocation extends Component {
             <div className="content-container">
                 <h2 className="content-header">Location</h2>
                 <div className="content" style={modalStyle}>
-                    {mapped}
+                    {maps}
                 </div>
                     { !this.props.viewMode ? addButton : null  }
             </div>

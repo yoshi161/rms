@@ -47,7 +47,8 @@ class Dashboard extends Component {
                  gradeHistory:[
                     {startDate: new Object, endDate: new Object, grade: '', devStage: 0},
                  ],
-                 locations: []
+                 locations: [],
+                 histories: []
             },
             current: null,
             lookupGrade: LookupData.grade,

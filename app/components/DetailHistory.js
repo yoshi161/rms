@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import { Grid, Row, Col, Glyphicon } from 'react-bootstrap';
 import update from 'react-addons-update';
+import _  from 'lodash';
 
 
 import Dialog from 'material-ui/Dialog';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
+import DatePicker from 'material-ui/DatePicker';
 import SelectField from 'material-ui/SelectField';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -16,47 +18,132 @@ import { connect } from 'react-redux';
 
 import {textComponent, selectComponent, datePickerComponent} from './reduxForms';
 
+
+
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
 class DetailHistory extends Component {
 
     constructor(props, context) {
         super(props, context);
         this.state = {
-        	dateState: false,
-        	projectState: false,
-        	programState: false,
+        	historyTemp: {
+        		from: new Date(),
+        		to: new Date(),
+        		client: "cilent",
+        		role: "role",
+        		jobDescs: ["a", "b"]
+        	}
         }
 
-        this.cobaOnClick = this.cobaOnClick.bind(this);
+        this.add = this.add.bind(this);
     }
 
-    changeDateState() {
-    	const newState = !this.state.dateState
-    	this.setState({dateState: newState})
-    	console.log("change date");
+    handleChangeValue(object, value, type, idx) {
+    	
+        var locationsTemp = _.cloneDeep(this.props.employeeTemp.histories);
+        locationsTemp[idx][type] = value; 
+        var propsTemp = update(this.props.employeeTemp, {
+             histories: {$set: locationsTemp} 
+             
+        });
+        this.props.setCurrentEmployeeTemp(propsTemp); 
     }
 
-    changeProjectState() {
-    	const newState = !this.state.projectState
-    	this.setState({projectState: newState})
+    add() {
+
+        const current = update(this.props, {
+            employeeTemp: {
+                histories: {$push: [_.cloneDeep(this.state.historyTemp)]}
+            }
+        });
+
+        this.props.setCurrentEmployeeTemp(current.employeeTemp);
     }
-
-    changeProgramState() {
-    	const newState = !this.state.programState
-    	this.setState({programState: newState})
-    }
-
-    cobaOnClick(data, index) {
-    	console.log('test');
-    	const newData = data.fields.get(data.index)
-    	newData.jobDesc.splice(index, 1);
-    	data.fields.remove(data.index)
-    	data.fields.insert(data.index, newData);
-    }
-
-
   
 
     render() {
+        var modalStyle = {
+            width: 800
+        };
+
+        var historyDetailNoEdit = (history) => {
+
+	        const monthFrom = monthNames[new Date(history.from).getMonth()];
+	        const yearFrom = new Date(history.from).getFullYear();
+	        const monthTo = monthNames[new Date(history.to).getMonth()];
+	        const yearTo = new Date(history.to).getFullYear();
+
+	        return (
+	        	<Col sm={3} md={3} className="location-time">
+                    <div className="location-month"> {monthFrom} - {monthTo} </div>
+                    <div className="location-year"> {yearFrom} - {yearTo} </div>
+                    <div className="location-month"> {history.client} </div>
+                    <div className="location-month"> {history.role} </div>
+				</Col>
+	        )
+
+        }
+
+        var historyDetailWithEdit = (history, idx) => (
+
+                		<Col sm={3} md={3} className="location-time">
+		                    <DatePicker
+		                        value={history.from}
+		                        floatingLabelText="From"
+		                        errorText={history.from==""?this.props.errorTextRequired:""}
+		                        onChange={(object, value) => this.handleChangeValue(object, value, 'from', idx)}
+		                        autoOk={true}
+		                    />
+		                    <DatePicker
+		                        value={history.to}
+		                        floatingLabelText="To"
+		                        errorText={history.to==""?this.props.errorTextRequired:""}
+		                        onChange={(object, value) => this.handleChangeValue(object, value, 'to', idx)}
+		                        autoOk={true}
+		                    />
+							{history.client}
+							{history.role}
+						</Col>
+        	);
+
+        var historyJobDescNoEdit = (history) => (
+			<Col sm={4} md={4} className="location-time">
+				{ history.jobDescs && history.jobDescs.map((jobDesc, index) => 
+						(
+
+        					<div className="location-month"> {jobDesc} </div>
+						)
+					) 
+				}
+			</Col>
+
+        );
+
+        var empTemp = this.props.employeeTemp;
+		var maps =  empTemp.histories ? empTemp.histories.map((history, idx) =>
+            (
+				  <Grid key={idx} >
+					<Row className="show-grid">
+                  	    { this.props.viewMode ? historyDetailNoEdit(history) : 
+                  	    		historyDetailWithEdit(history, idx) }
+						{ this.props.viewMode ? historyJobDescNoEdit(history) : 
+							historyJobDescWithEdit(history, idx)}
+					</Row>
+				  </Grid>
+            ) 
+		): null;
+
+
+        const addButton = (
+                <div className="location-float-button">
+                    <FloatingActionButton secondary={true} onClick={this.add}>
+                      <ContentAdd />
+                    </FloatingActionButton>
+                </div>
+                );
 
         const { change } = this.props;
 
@@ -64,129 +151,14 @@ class DetailHistory extends Component {
 
         return(
             <div className="content-container">
-                <h2 className="content-header">History</h2>
-				<FieldArray name="data" component= { dataRender } 
-					changeDate={this.changeDateState.bind(this)} 
-					cobaOnClick={this.cobaOnClick}	
-					{...this.props} change={change}/>
+                <h2 className="content-header">History</h2>	
+                <div className="content" style={modalStyle}>
+                    {maps}
+                </div>
+                { !this.props.viewMode ? addButton : null  }
             </div>
         );
     }
 }
 
-const dataRender = (props) => (
-		<div>
-			{props.fields.getAll().map((data, index) => (
-				  <Grid key={index}>
-					<Row className="show-grid">
-						<Col sm={3} md={3} className="location-time">
-							<Dates changeDate={props.changeDate} 
-								change={props.change} theState={data.state} index={index}/>
-						</Col>
-						<Col sm={4} md={4} className="location-time">
-							<JobDesc data={data} {...props} index={index} />
-						</Col>
-						<Col sm={4} md={2} >
-						</Col>
-					</Row>
-				  </Grid>
-			))}
-
-   		 <button type="button" onClick={() => props.fields.push({project: "asdasdasd", jobDesc:['a','b','c']})}>Add History</button>
-		</div>
-	)
-
-const JobDesc = (props) => (
-		<ul>
-		{props.data.jobDesc.map((data, index) => (
-			<li onClick={() => props.cobaOnClick(props, index) }>{data}</li>
-			))}
-		</ul>
-	);
-
-
-const Dates = function (props) {
-	const dateButtonStyle = {float: 'right', marginRight: '10px'};
-
-	const state = props.theState
-	const changeDate = props.changeDate
-	const prop = props;
-	if (state) {	
-		return (
-				<div>
-					<Field name={`data[${props.index}].startDate`} component={datePickerComponent} label="Start Date"/>
-					<Field name={`data[${props.index}].endDate`} component={datePickerComponent} label="End Date"/>
-					<div>
-     				   <Glyphicon glyph="floppy-disk" style={dateButtonStyle} onClick={() => props.change(`data[${props.index}].state`, false)}/>
-     				   <Glyphicon glyph="remove" style={dateButtonStyle} />
-					</div>
-				</div>
-			);
-
-	} else {
-		return  (
-				<div>
-					<div onClick={() => props.change(`data[${props.index}].state`, true)}> 
-						<Field name={`data[${props.index}].startDate`} component={plainTextMonth} /> - <Field name={`data[${props.index}].endDate`} component={plainTextMonth} /> </div>
-					<div onClick={() =>  props.change(`data[${props.index}].state`, true)}> 
-						<Field name={`data[${props.index}].startDate`} component={plainTextYear} /> - <Field name={`data[${props.index}].endDate`} component={plainTextYear} /> </div>
-				</div>
-		);
-	}
-}
-
-const monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
-
-
-const plainTextYear = field => ( <span  className="location-month" > {field.input.value ? field.input.value.getFullYear() : "Year"} </span> )
-
-const plainTextMonth = field => ( <span className="location-year" > {field.input.value ?  monthNames[field.input.value.getMonth()] : "Month"}  </span> )
-
-DetailHistory = reduxForm({
-  form: 'detailHistory',  // a unique identifier for this form
-  destroyOnUnmount: false
-})(DetailHistory)
-
-// You have to connect() to any reducers that you wish to connect to yourself
-const DetailHistoryContainer = connect(
-  (state, props) => ({
-    	formValues: formValueSelector('detailHistory'),
-	    initialValues: {
-	    	data : [ /*{
-	    		project: 'Project Name 1',
-	    		program: 'Program 1',
-	    		startDate: new Date(),
-	    		endDate: new Date(),
-	    		details: [
-	    			"details 1",
-	    			"details 2",
-	    			"details 3",
-	    			"details 4"
-	    		],
-	    		state: false
-
-	    	},{
-	    		project: 'Project Name 2',
-	    		program: 'Program 2',
-	    		startDate: new Date(),
-	    		endDate:  new Date(),
-	    		details: [
-	    			"details 1",
-	    			"details 2",
-	    			"details 3",
-	    			"details 4"
-	    		],
-	    		state: false
-
-	    	}
-	    	*/], 
-		    	asd: "asd",
-	    		startDate: new Date(),
-	    		endDate:  new Date()
-    		}
-  })              
-)(DetailHistory)
-
-export default DetailHistoryContainer;
+export default DetailHistory;

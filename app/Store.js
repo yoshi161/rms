@@ -7,8 +7,7 @@ import EmployeesData from './data/EmployeesData'
 import { devToolsExtension } from 'redux-devtools-extension';
 
 const defaultState = {
-	employees: EmployeesData,
-	employee: {}
+	employees: EmployeesData
 }
 
 const composeEnhancers =
