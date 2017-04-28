@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Grid, Row, Col, Glyphicon } from 'react-bootstrap';
+import { Grid, Row, Col, Glyphicon, Button } from 'react-bootstrap';
 import update from 'react-addons-update';
 import _  from 'lodash';
 
@@ -39,14 +39,25 @@ class DetailHistory extends Component {
         }
 
         this.add = this.add.bind(this);
+        this.deleteHistory = this.deleteHistory.bind(this);
     }
 
     handleChangeValue(object, value, type, idx) {
     	
-        var locationsTemp = _.cloneDeep(this.props.employeeTemp.histories);
-        locationsTemp[idx][type] = value; 
+        var historiesTemp = _.cloneDeep(this.props.employeeTemp.histories);
+        historiesTemp[idx][type] = value; 
         var propsTemp = update(this.props.employeeTemp, {
-             histories: {$set: locationsTemp} 
+             histories: {$set: historiesTemp} 
+             
+        });
+        this.props.setCurrentEmployeeTemp(propsTemp); 
+    }
+
+    handleJobdescChangeValue(object, value, type, idx, index) {
+        var historiesTemp = _.cloneDeep(this.props.employeeTemp.histories);
+        historiesTemp[idx][type][index] = value; 
+        var propsTemp = update(this.props.employeeTemp, {
+             histories: {$set: historiesTemp} 
              
         });
         this.props.setCurrentEmployeeTemp(propsTemp); 
@@ -61,6 +72,37 @@ class DetailHistory extends Component {
         });
 
         this.props.setCurrentEmployeeTemp(current.employeeTemp);
+    }
+
+    addJob(idx) {
+        var historiesTemp = _.cloneDeep(this.props.employeeTemp.histories);
+        historiesTemp[idx].jobDescs.push("new description"); 
+        var propsTemp = update(this.props.employeeTemp, {
+             histories: {$set: historiesTemp} 
+             
+        });
+        this.props.setCurrentEmployeeTemp(propsTemp); 
+    }
+
+    removeJob(idx, index) {
+        var historiesTemp = _.cloneDeep(this.props.employeeTemp.histories);
+        historiesTemp[idx].jobDescs.splice(index, 1); 
+        var propsTemp = update(this.props.employeeTemp, {
+             histories: {$set: historiesTemp} 
+             
+        });
+        this.props.setCurrentEmployeeTemp(propsTemp); 
+    }
+
+    deleteHistory(index) {
+    	debugger
+        var historiesTemp = _.cloneDeep(this.props.employeeTemp.histories);
+        historiesTemp.splice(index, 1); 
+        var propsTemp = update(this.props.employeeTemp, {
+             histories: {$set: historiesTemp} 
+             
+        });
+        this.props.setCurrentEmployeeTemp(propsTemp); 
     }
   
 
@@ -87,40 +129,88 @@ class DetailHistory extends Component {
 
         }
 
-        var historyDetailWithEdit = (history, idx) => (
+        var historyDetailWithEdit = (history, idx) => {
+        		var from = new Date(history.from);
+        		var to = new Date(history.to);
 
-                		<Col sm={3} md={3} className="location-time">
-		                    <DatePicker
-		                        value={history.from}
-		                        floatingLabelText="From"
-		                        errorText={history.from==""?this.props.errorTextRequired:""}
-		                        onChange={(object, value) => this.handleChangeValue(object, value, 'from', idx)}
-		                        autoOk={true}
-		                    />
-		                    <DatePicker
-		                        value={history.to}
-		                        floatingLabelText="To"
-		                        errorText={history.to==""?this.props.errorTextRequired:""}
-		                        onChange={(object, value) => this.handleChangeValue(object, value, 'to', idx)}
-		                        autoOk={true}
-		                    />
-							{history.client}
-							{history.role}
-						</Col>
+        	return (
+
+    		<Col sm={3} md={3} className="location-time">
+                <DatePicker
+                    value={from}
+                    floatingLabelText="From"
+                    errorText={history.from==""?this.props.errorTextRequired:""}
+                    onChange={(object, value) => this.handleChangeValue(object, value, 'from', idx)}
+                    autoOk={true}
+                />
+                <DatePicker
+                    value={to}
+                    floatingLabelText="To"
+                    errorText={history.to==""?this.props.errorTextRequired:""}
+                    onChange={(object, value) => this.handleChangeValue(object, value, 'to', idx)}
+                    autoOk={true}
+                />
+                <TextField
+                	id={'client' + idx}
+                    value={history.client}
+                    onChange={(object, value) => this.handleChangeValue(object, value, 'client', idx)}
+                />
+                <TextField
+                	id={'role' + idx}
+                    value={history.role}
+                    onChange={(object, value) => this.handleChangeValue(object, value, 'role', idx)}
+                />
+			</Col>
         	);
+        }
 
         var historyJobDescNoEdit = (history) => (
 			<Col sm={4} md={4} className="location-time">
+				<div>Job Description</div>
 				{ history.jobDescs && history.jobDescs.map((jobDesc, index) => 
 						(
 
-        					<div className="location-month"> {jobDesc} </div>
+        					<div className="location-month" key={index}> {jobDesc} </div>
 						)
 					) 
 				}
 			</Col>
 
         );
+
+        var historyJobDescWithEdit = (history, idx) => (
+			<Col sm={4} md={4} className="location-time">
+				<div>
+					<span>Job Description </span>
+
+                    <Glyphicon glyph="plus" className="location-action" 
+                         onClick={() => this.addJob(idx)}  />
+				</div>
+				{ history.jobDescs && history.jobDescs.map((jobDesc, index) => 
+						(
+							<div key={index} >
+			                    <TextField
+			                    	id={'jobdesc' + index}
+			                        value={jobDesc}
+			                        onChange={(object, value) => this.handleJobdescChangeValue(object, value, 'jobDescs', idx, index)}
+			                    />
+
+		                    <Glyphicon glyph="trash" className="location-action" 
+		                         onClick={() => this.removeJob(idx, index)}/>
+		                    </div>
+						)
+					) 
+				}
+			</Col>
+
+        );
+
+		const actionDeleteButton = (index) => (
+                <div>
+                    <Glyphicon glyph="trash" className="location-action" 
+                        onClick={() => this.deleteHistory(index)} />
+                </div>
+            );
 
         var empTemp = this.props.employeeTemp;
 		var maps =  empTemp.histories ? empTemp.histories.map((history, idx) =>
@@ -131,6 +221,7 @@ class DetailHistory extends Component {
                   	    		historyDetailWithEdit(history, idx) }
 						{ this.props.viewMode ? historyJobDescNoEdit(history) : 
 							historyJobDescWithEdit(history, idx)}
+						{ this.props.viewMode ? null : actionDeleteButton(idx)}
 					</Row>
 				  </Grid>
             ) 

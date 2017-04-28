@@ -48,7 +48,8 @@ class Dashboard extends Component {
                     {startDate: new Object, endDate: new Object, grade: '', devStage: 0},
                  ],
                  locations: [],
-                 histories: []
+                 histories: [],
+                 families: []
             },
             current: null,
             lookupGrade: LookupData.grade,

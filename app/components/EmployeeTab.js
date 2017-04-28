@@ -6,6 +6,7 @@ import update from 'react-addons-update';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import ActionFamily from 'material-ui/svg-icons/action/accessibility';
 import ActionAccountBox from 'material-ui/svg-icons/action/account-box';
 import ActionHistory from 'material-ui/svg-icons/action/history';
 import ActionHome from 'material-ui/svg-icons/action/home';
@@ -20,7 +21,7 @@ import DetailLocation from './DetailLocation'
 
 import {hashHistory} from 'react-router';
 
-import {DETAILS, LOCATION, HISTORY} from '../util/paths';
+import {DETAILS, LOCATION, HISTORY, FAMILY} from '../util/paths';
 
 class EmployeeTab extends Component {
 
@@ -52,11 +53,14 @@ class EmployeeTab extends Component {
             case DETAILS:
                 path = 0;
                 break;
-            case HISTORY:
+            case FAMILY:
                 path = 1;
                 break;
-            case LOCATION:
+            case HISTORY:
                 path = 2;
+                break;
+            case LOCATION:
+                path = 3;
                 break;
             default:
                 path = 0;
@@ -227,7 +231,7 @@ class EmployeeTab extends Component {
 
                         })}
                      </Tab>
-                   <Tab icon={<ActionHistory/>}  onActive={() => onActiveTab(HISTORY)} value={1}>
+                   <Tab icon={<ActionFamily/>}  onActive={() => onActiveTab(FAMILY)} value={1}>
                         {React.cloneElement(this.props.children, {
                             viewMode: this.state.viewMode,
                             employees: this.props.employees,
@@ -239,7 +243,7 @@ class EmployeeTab extends Component {
 
                         })}
                    </Tab>
-                   <Tab icon={<CommunicationLocationOn/>}  onActive={() => onActiveTab(LOCATION)} value={2}>
+                   <Tab icon={<ActionHistory/>}  onActive={() => onActiveTab(HISTORY)} value={2}>
                         {React.cloneElement(this.props.children, {
                             viewMode: this.state.viewMode,
                             employees: this.props.employees,
@@ -251,6 +255,20 @@ class EmployeeTab extends Component {
 
                         })}
                    </Tab>
+                   <Tab icon={<CommunicationLocationOn/>}  onActive={() => onActiveTab(LOCATION)} value={3}>
+                        {React.cloneElement(this.props.children, {
+                            viewMode: this.state.viewMode,
+                            employees: this.props.employees,
+                            editEmployee: this.props.editEmployee,
+                            setCurrentEmployee: this.props.setCurrentEmployee,
+                            errorTextRequired: "This field is required",
+                            employeeTemp: this.state.employeeTemp,
+                            setCurrentEmployeeTemp: this.setCurrentEmployeeTemp,
+
+                        })}
+                   </Tab>
+
+
                </Tabs>
                 <div className="foot">
                     { (this.state.viewMode) ? (

@@ -3,6 +3,7 @@ import {render} from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Dashboard from './components/Dashboard';
 import EmployeeTab from './components/EmployeeTab';
+import DetailFamily from './components/DetailFamily';
 import DetailHistory from './components/DetailHistory';
 import DetailEmployee from './components/DetailEmployee';
 import DetailLocation from './components/DetailLocation';
@@ -45,6 +46,7 @@ const routing = (
 					 <IndexRoute component={DetailEmployee} />
 					 <Route path="locations" component={DetailLocation} />
 					 <Route path="histories" component={DetailHistory} />
+					 <Route path="families" component={DetailFamily} />
 			   </Route>
 			</Route>
 			<Route path='/404' component={NotFound} />
