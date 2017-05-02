@@ -4,9 +4,10 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import Dashboard from './components/Dashboard';
 import EmployeeTab from './components/EmployeeTab';
 import DetailFamily from './components/DetailFamily';
+import DetailGrade from './components/DetailGrade';
 import DetailHistory from './components/DetailHistory';
-import DetailEmployee from './components/DetailEmployee';
 import DetailLocation from './components/DetailLocation';
+import DetailEmployee from './components/DetailEmployee';
 import NotFound from './components/NotFound';
 
 import Login from './components/Login';
@@ -44,9 +45,12 @@ const routing = (
 			   </Route>
 				<Route  path="details/:userName"  component={EmployeeTab}>
 					 <IndexRoute component={DetailEmployee} />
-					 <Route path="locations" component={DetailLocation} />
-					 <Route path="histories" component={DetailHistory} />
+					 <Route path="grades" component={DetailGrade} />
 					 <Route path="families" component={DetailFamily} />
+					 <Route path="histories" component={DetailHistory} />
+					 <Route path="locations" component={DetailLocation} />
+
+
 			   </Route>
 			</Route>
 			<Route path='/404' component={NotFound} />

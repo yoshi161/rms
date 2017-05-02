@@ -107,6 +107,101 @@ const LookupData = {
         },
     ],
 
+    family: [
+        {
+            code: 'W',
+            type: 'FAMILY',
+            desc: 'Wife'
+        },
+        {
+            code: 'S',
+            type: 'FAMILY',
+            desc: 'Son'
+        },
+        {
+            code: 'D',
+            type: 'FAMILY',
+            desc: 'Daughter'
+        },
+    ],
+
+    gender: [
+        {
+            code: 'M',
+            type: 'GENDER',
+            desc: 'Male'
+        },
+        {
+            code: 'F',
+            type: 'GENDER',
+            desc: 'Female'
+        }
+    ],
+
+    devStage: [
+        {
+            code: '1',
+            type: 'DEVSTSAGE',
+            desc: 'DS 1'
+        },
+        {
+            code: '2',
+            type: 'DEVSTAGE',
+            desc: 'DS 2'
+        },
+        {
+            code: '3',
+            type: 'DEVSTAGE',
+            desc: 'DS 3'
+        },
+        {
+            code: '4',
+            type: 'DEVSTAGE',
+            desc: 'DS 4'
+        },
+        {
+            code: '5',
+            type: 'DEVSTAGE',
+            desc: 'DS 5'
+        },
+        {
+            code: '6',
+            type: 'DEVSTAGE',
+            desc: 'DS 6'
+        },
+        {
+            code: '7',
+            type: 'DEVSTAGE',
+            desc: 'DS 7'
+        },
+        {
+            code: '8',
+            type: 'DEVSTAGE',
+            desc: 'DS 9'
+        },
+        {
+            code: '10',
+            type: 'DEVSTAGE',
+            desc: 'DS 10'
+        },
+        {
+            code: '11',
+            type: 'DEVSTAGE',
+            desc: 'DS 11'
+        },
+        {
+            code: '12',
+            type: 'DEVSTAGE',
+            desc: 'DS 12'
+        },
+        {
+            code: '13',
+            type: 'DEVSTAGE',
+            desc: 'DS 13'
+        }
+    ]
+
+
 }
 
 export default LookupData;

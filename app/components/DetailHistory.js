@@ -32,9 +32,9 @@ class DetailHistory extends Component {
         	historyTemp: {
         		from: new Date(),
         		to: new Date(),
-        		client: "cilent",
-        		role: "role",
-        		jobDescs: ["a", "b"]
+        		client: "new client",
+        		role: "new role",
+        		jobDescs: ["new jobdesc"]
         	}
         }
 
@@ -76,6 +76,9 @@ class DetailHistory extends Component {
 
     addJob(idx) {
         var historiesTemp = _.cloneDeep(this.props.employeeTemp.histories);
+        if (!historiesTemp[idx].jobDescs) {
+        	historiesTemp[idx].jobDescs = [];
+        }
         historiesTemp[idx].jobDescs.push("new description"); 
         var propsTemp = update(this.props.employeeTemp, {
              histories: {$set: historiesTemp} 
@@ -95,7 +98,6 @@ class DetailHistory extends Component {
     }
 
     deleteHistory(index) {
-    	debugger
         var historiesTemp = _.cloneDeep(this.props.employeeTemp.histories);
         historiesTemp.splice(index, 1); 
         var propsTemp = update(this.props.employeeTemp, {

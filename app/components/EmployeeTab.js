@@ -21,7 +21,7 @@ import DetailLocation from './DetailLocation'
 
 import {hashHistory} from 'react-router';
 
-import {DETAILS, LOCATION, HISTORY, FAMILY} from '../util/paths';
+import {DETAILS, LOCATION, HISTORY, FAMILY, GRADE} from '../util/paths';
 
 class EmployeeTab extends Component {
 
@@ -59,8 +59,11 @@ class EmployeeTab extends Component {
             case HISTORY:
                 path = 2;
                 break;
-            case LOCATION:
+            case GRADE:
                 path = 3;
+                break;
+            case LOCATION:
+                path = 4;
                 break;
             default:
                 path = 0;
@@ -255,7 +258,19 @@ class EmployeeTab extends Component {
 
                         })}
                    </Tab>
-                   <Tab icon={<CommunicationLocationOn/>}  onActive={() => onActiveTab(LOCATION)} value={3}>
+                   <Tab icon={<MapsLayers/>}  onActive={() => onActiveTab(GRADE)} value={3}>
+                        {React.cloneElement(this.props.children, {
+                            viewMode: this.state.viewMode,
+                            employees: this.props.employees,
+                            editEmployee: this.props.editEmployee,
+                            setCurrentEmployee: this.props.setCurrentEmployee,
+                            errorTextRequired: "This field is required",
+                            employeeTemp: this.state.employeeTemp,
+                            setCurrentEmployeeTemp: this.setCurrentEmployeeTemp,
+
+                        })}
+                   </Tab>
+                   <Tab icon={<CommunicationLocationOn/>}  onActive={() => onActiveTab(LOCATION)} value={4}>
                         {React.cloneElement(this.props.children, {
                             viewMode: this.state.viewMode,
                             employees: this.props.employees,
