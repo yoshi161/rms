@@ -4,6 +4,7 @@ import update from 'react-addons-update';
 import _  from 'lodash';
 
 
+import moment from 'moment-es6';
 import Dialog from 'material-ui/Dialog';
 import Checkbox from 'material-ui/Checkbox';
 import MenuItem from 'material-ui/MenuItem';
@@ -12,6 +13,7 @@ import DatePicker from 'material-ui/DatePicker';
 import SelectField from 'material-ui/SelectField';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
 import LookupData from '../data/LookupData';
 import { initialize, reduxForm, Field, FieldArray, SubmissionError, Form, formValueSelector } from 'redux-form';
@@ -20,17 +22,13 @@ import { connect } from 'react-redux';
 import {textComponent, selectComponent, datePickerComponent} from './reduxForms';
 
 
-const monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
-
 class DetailFamily extends Component {
 
     constructor(props, context) {
         super(props, context);
         this.state = {
             familyTemp: {
-                name: "",
+                name: "New Name",
                 gender: "M",
                 dob: new Date(),
                 type: "W",
@@ -44,7 +42,6 @@ class DetailFamily extends Component {
     }
 
     handleChangeValue(object, value, type, idx) {
-        debugger
         var familiesTemp = _.cloneDeep(this.props.employeeTemp.families);
         familiesTemp[idx][type] = value; 
         var propsTemp = update(this.props.employeeTemp, {
@@ -79,112 +76,104 @@ class DetailFamily extends Component {
   
 
     render() {
-            const detailNoEdit = (family) => {
 
-                const dob = monthNames[new Date(family.dob).getMonth()];
+            const families = this.props.employeeTemp.families;
 
-                return (
-                    <Col sm={10} md={7}>
-                        <div>{family.name}</div>
-                        <div>{family.gender}</div>
-                        <div>{family.dob}</div>
-                        <div>{family.type}</div>
-                        <div>{family.active}</div>
-                    </Col>
-                )
+            const detailNoEdit = (that, families) => {
+
+                return families.map((row, index) => {
+                    const type = _.find(that.state.lookupFamily, {'code': row.type}).desc;
+                    const gender = _.find(that.state.lookupGender, {'code': row.gender}).desc;
+                    const dob = row.dob ? moment(row.dob).format("MMM DD, YYYY") : "";
+
+                     return (     
+                        <TableRow key={index}>
+                            <TableRowColumn>{row.name}</TableRowColumn>
+                            <TableRowColumn>{gender}</TableRowColumn>
+                            <TableRowColumn>{dob}</TableRowColumn>
+                            <TableRowColumn>{type}</TableRowColumn>
+                            <TableRowColumn>
+                                <Checkbox
+                                  id={'active' + index}
+                                  disabled={true}
+                                  checked={row.active}/>
+                            </TableRowColumn>
+                            <TableRowColumn>
+                            </TableRowColumn>
+                        </TableRow>
+                        )
+                })
 
             }
 
-
-
-          const actionDeleteButton = (index) => (
+           const actionDeleteButton = (index) => (
                 <div>
                     <Glyphicon glyph="trash" className="location-action" 
                         onClick={() => this.delete(index)} />
                 </div>
             );
 
-            const detailWithEdit = (family, idx) => {
+            const detailWithEdit = (families) => {
 
-                const lookupGender = this.state.lookupGender.map ( div =>
-                    <MenuItem key={div.code} value={div.code} primaryText={div.desc} />
-                );
+            const lookupGender = this.state.lookupGender.map ( div =>
+                <MenuItem key={div.code} value={div.code} primaryText={div.desc} />
+            );
 
-                const lookupFamily = this.state.lookupFamily.map ( div =>
-                    <MenuItem key={div.code} value={div.code} primaryText={div.desc} />
-                );
+            const lookupFamily = this.state.lookupFamily.map ( div =>
+                <MenuItem key={div.code} value={div.code} primaryText={div.desc} />
+            );
 
-                const dob = new Date(family.dob);
-
-                const textField = {
-                    width: '100',
-                    display: 'inline-flex',
-                    marginRight: '20'
-                }
-
-                return (
-                    <Col sm={10} md={7}>
-                        <div className="input-group">
-                            <TextField
-                                style={textField}
-                                id={'name' + idx}
-                                value={family.name}
-                                onChange={(object, value) => this.handleChangeValue(object, value, 'name', idx)}
-                            />
-                            <SelectField
-                                id={'gender' + idx}
-                                value={family.gender}
-                                style={textField}
-                                floatingLabelText="gender"
-                                onChange={(object, index, value) =>  this.handleChangeValue(object, value, 'gender', idx)}
-                                disabled={this.props.viewMode} >
-                                {lookupGender}
-                            </SelectField>
-                            <DatePicker
-                                id={'dob' + idx}
-                                style={textField}
-                                textFieldStyle={textField}
-                                value={dob}
-                                floatingLabelText="DOB"
-                                onChange={(object, value) =>  this.handleChangeValue(object, value, 'dob', idx)}
-                                autoOk={true}
-                                disabled={this.props.viewMode}
-                            />
-                            
-                            <SelectField
-                                id={'type' + idx}
-                                className="form-inline"
-                                style={textField}
-                                value={family.type}
-                                floatingLabelText="Type"
-                                onChange={(object, index, value) =>  this.handleChangeValue(object, value, 'type', idx)}
-                                disabled={this.props.viewMode} >
-                                {lookupFamily}
-                            </SelectField>
-                            <Checkbox
-                              id={'active' + idx}
-                              style={textField}
-                              className="form-inline"
-                              label="Active"
-                              checked={family.active}
-                              onCheck={(object, value) =>  this.handleChangeValue(object, value, 'active', idx)}
-                            />
-                        </div>
-                    </Col>
-                    )
+             return families.map((row, idx) =>{
+                 const dob = new Date(row.dob);
+                    return (
+                        <TableRow key={idx}>
+                            <TableRowColumn>                           
+                                 <TextField
+                                        id={'name' + idx}
+                                        value={row.name}
+                                        onChange={(object, value) => this.handleChangeValue(object, value, 'name', idx)}
+                                    />
+                            </TableRowColumn>
+                            <TableRowColumn>
+                                <SelectField
+                                    id={'gender' + idx}
+                                    value={row.gender}
+                                    onChange={(object, index, value) =>  this.handleChangeValue(object, value, 'gender', idx)}>
+                                    {lookupGender}
+                                </SelectField>
+                            </TableRowColumn>
+                            <TableRowColumn>
+                                <DatePicker
+                                    id={'dob' + idx}
+                                    value={dob}
+                                    onChange={(object, value) =>  this.handleChangeValue(object, value, 'dob', idx)}
+                                    autoOk={true} />
+                            </TableRowColumn>
+                            <TableRowColumn>
+                                <SelectField
+                                    id={'type' + idx}
+                                    value={row.type}
+                                    onChange={(object, index, value) =>  this.handleChangeValue(object, value, 'type', idx)}
+                                    >
+                                    {lookupFamily}
+                                </SelectField>
+                            </TableRowColumn>
+                            <TableRowColumn>
+                                <Checkbox
+                                  id={'active' + idx}
+                                  checked={row.active}
+                                  onCheck={(object, value) =>  this.handleChangeValue(object, value, 'active', idx)} />
+                            </TableRowColumn>
+                            <TableRowColumn>
+                                {actionDeleteButton(idx)}
+                            </TableRowColumn>
+                        </TableRow>
+                    )})
             }
 
-            const maps =   this.props.employeeTemp.families ? this.props.employeeTemp.families.map((family, idx) =>
-                (
-                      <Grid key={idx} >
-                        <Row className="show-grid">
-                            { this.props.viewMode ? detailNoEdit(family) : 
-                                    detailWithEdit(family, idx) }
-
-                            { this.props.viewMode ? null : actionDeleteButton(idx)}
-                        </Row>
-                      </Grid>
-                )): null;
+            const maps = families && families.length > 0 ? 
+                    this.props.viewMode ? detailNoEdit(this, families) : 
+                        detailWithEdit(families) : null;
 
             const addButton = (
                 <div className="location-float-button">
@@ -194,20 +183,35 @@ class DetailFamily extends Component {
                 </div>
             );
 
-        	return (
-
-                <div className="content-container">
-                    <h2 className="content-header">Family</h2> 
+            return (
+            <div className="content-container">
+                <h2 className="content-header">Family</h2>
                     <div className="content">
-                        <form>
-                             {maps}
-                        </form>
+                        <Table>
+                            <TableHeader
+                                displaySelectAll={false} >
+                                <TableRow>
+                                    <TableHeaderColumn style={{ width: '10px' }}></TableHeaderColumn>
+                                    <TableHeaderColumn>Name</TableHeaderColumn>
+                                    <TableHeaderColumn>Gender</TableHeaderColumn>
+                                    <TableHeaderColumn>DOB</TableHeaderColumn>
+                                    <TableHeaderColumn>Type</TableHeaderColumn>
+                                    <TableHeaderColumn>Active</TableHeaderColumn>
+                                    <TableHeaderColumn></TableHeaderColumn>
+                                </TableRow>
+                            </TableHeader>
+                                <TableBody
+                                    displayRowCheckbox={false}
+                                    stripedRows={true}
+                                    showRowHover={true} >
+                                     {maps}
+                                </TableBody>
+                        </Table>
                     </div>
 
                     { !this.props.viewMode ? addButton : null  }
-
-                </div>
-        	);
+            </div>
+        );
         }
 }
 

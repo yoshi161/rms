@@ -29,7 +29,6 @@ function employees (state=initialState, action) {
 		case 'LOAD_EMPLOYEES':
 			return Immutable.asMutable([...action.employees]);
 		case 'DELETE_EMPLOYEE':
-			debugger
 			let index = state.findIndex((x) => x.id === action.id); 
 			  return Immutable.asMutable([
 			    ...state.slice(0, index),
@@ -46,7 +45,6 @@ function employees (state=initialState, action) {
 
 function editEmployee(state = initialState, action) {
 	if (typeof action.id !== 'undefined') {
-
 		const index = state.findIndex(s => s.id === action.id)
 		if (index !== -1) {
 			const states = [...state]

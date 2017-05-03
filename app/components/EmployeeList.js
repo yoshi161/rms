@@ -120,9 +120,9 @@ class EmployeeList extends Component {
             employee = this.props.employees;
         }
 
-        var employeeListDetail = employee.map( employee =>
+        var employeeListDetail = employee.map( (employee, index) =>
             <EmployeeListDetail
-                key={employee.id}
+                key={employee.id+ "_" + index} 
                 employee={employee}
                 setCurrentEmployee={this.props.setCurrentEmployee.bind(this)}
             />

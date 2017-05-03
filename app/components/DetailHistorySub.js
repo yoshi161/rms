@@ -31,7 +31,7 @@ if (props.fields.length > 0) {
 				  <Grid key={index}>
 					<Row className="show-grid">
 						<Col sm={3} md={3} className="location-time">
-					<div onClick={(props) => {debugger}}> 
+					<div onClick={(props) => {}}> 
 						<Field name={`data[${props.index}].startDate`} component={plainTextMonth} />asd</div>
 						</Col>
 						<Col sm={4} md={4} className="location-time">

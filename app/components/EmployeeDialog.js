@@ -2,15 +2,17 @@ import React, {Component} from 'react';
 import update from 'react-addons-update';
 
 import Dialog from 'material-ui/Dialog';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import {Step, Stepper, StepLabel} from 'material-ui/Stepper';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import {Step, Stepper, StepLabel} from 'material-ui/Stepper';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 
-import DetailEmployee from './DetailEmployee'
 import DetailGrade from './DetailGrade'
-import DetailDependent from './DetailDependent'
+import DetailFamily from './DetailFamily'
+import DetailHistory from './DetailHistory'
+import DetailEmployee from './DetailEmployee'
 import DetailLocation from './DetailLocation'
+import DetailDependent from './DetailDependent'
 
 class EmployeeDialog extends Component {
 
@@ -20,49 +22,24 @@ class EmployeeDialog extends Component {
             createDialogIsOpen: false,
             stepIndex: 0,
             errorTextRequired: '',
-            employee: {
-                 id: '',
-                 firstName: '',
-                 lastName: '',
-                 gender: '',
-                 dob: new Object,
-                 nationality: '',
-                 maritalStatus: '',
-                 phone: '',
-                 subDivision: '',
-                 status: '',
-                 suspendDate: new Object,
-                 hireDate: new Object,
-                 grade: '',
-                 division: '',
-                 email: '',
-                 office: '',
-                 active: true,
-                 dependents: [],
-                 gradeHistory:[
-                    {startDate: new Object, endDate: new Object, grade: '', devStage: 0},
-                 ],
-                 locations: [],
-                 histories: [],
-            }
+            employee: this.emptyEmployee()
         }
 
+        this.emptyEmployee = this.emptyEmployee.bind(this);
         this.setNewEmployee = this.setNewEmployee.bind(this);
         this.getStepContent = this.getStepContent.bind(this);
         this.setCurrentEmployeeTemp = this.setCurrentEmployeeTemp.bind(this);
     }
 
-
+    setCurrentEmployeeTemp(currentEmployee) {
+        this.setState({
+            employee: _.cloneDeep(currentEmployee) 
+        });
+    }
 
     setNewEmployee(newEmployee) {
         this.setState({
             employee: newEmployee
-        })
-    }
-
-    setCurrentEmployeeTemp(currentEmployee) {
-        this.setState({
-            employee: currentEmployee
         })
     }
 
@@ -77,7 +54,13 @@ class EmployeeDialog extends Component {
             createDialogIsOpen: false,
             stepIndex: 0,
             errorTextRequired: '',
-            employee: {
+            employee: this.emptyEmployee()
+        });
+    }
+
+    emptyEmployee() {
+      return {
+        
                  id: '',
                  firstName: '',
                  lastName: '',
@@ -100,9 +83,11 @@ class EmployeeDialog extends Component {
                      {startDate: new Object, endDate: new Object, grade: '', devStage: 0},
                  ],
                  locations: [],
-                 histories: []
+                 histories: [],
+                 families: [],
+                 grades: []
+
             }
-        });
     }
 
     getStepContent(stepIndex) {
@@ -115,30 +100,54 @@ class EmployeeDialog extends Component {
                         errorTextRequired={this.state.errorTextRequired}
                         setCurrentEmployeeTemp = {this.setCurrentEmployeeTemp}
                     />
-                );
+                ); 
             case 1:
-                return 'History';
+                return (
+                    <DetailFamily
+                        employee={this.state.employee}
+                        viewMode={false}
+                        fromAddEmployee={true}
+                        employeeTemp={this.state.employee}
+                        errorTextRequired={this.state.errorTextRequired}
+                        setCurrentEmployee={this.setNewEmployee.bind(this)}
+                        setCurrentEmployeeTemp = {this.setCurrentEmployeeTemp}
+                    />);
             case 2:
                 return (
                     <DetailGrade
                         employee={this.state.employee}
                         viewMode={false}
                         fromAddEmployee={true}
+                        employeeTemp={this.state.employee}
                         errorTextRequired={this.state.errorTextRequired}
                         setCurrentEmployee={this.setNewEmployee.bind(this)}
+                        setCurrentEmployeeTemp = {this.setCurrentEmployeeTemp}
                     />
                 );
             case 3:
                 return (
-                    <DetailDependent
+                    <DetailHistory
                         employee={this.state.employee}
                         viewMode={false}
+                        fromAddEmployee={true}
+                        employeeTemp={this.state.employee}
                         errorTextRequired={this.state.errorTextRequired}
                         setCurrentEmployee={this.setNewEmployee.bind(this)}
+                        setCurrentEmployeeTemp = {this.setCurrentEmployeeTemp}
                     />
                 );
             case 4:
-                return 'Address';
+                return (
+                    <DetailLocation
+                        employee={this.state.employee}
+                        viewMode={false}
+                        fromAddEmployee={true}
+                        employeeTemp={this.state.employee}
+                        errorTextRequired={this.state.errorTextRequired}
+                        setCurrentEmployee={this.setNewEmployee.bind(this)}
+                        setCurrentEmployeeTemp = {this.setCurrentEmployeeTemp}
+                    />
+                );
             default:
                 return
         }
@@ -152,10 +161,6 @@ class EmployeeDialog extends Component {
         });
         var employeesData = this.props.employees
         this.props.addEmployee(newEmployee.employee.id, newEmployee.employee);
-        //employeesData.push(newEmployee.employee)
-        //console.log("-- Add New Employee --");
-        //console.log(newEmployee);
-       // this.props.setEmployees(employeesData);
         this.handleCloseDialog();
     }
 
@@ -181,22 +186,8 @@ class EmployeeDialog extends Component {
             case 1:
                 break;
             case 2:
-                var grade = this.state.employee.gradeHistory;
-                if (grade.length > 0){
-                    grade.forEach ( grade => {
-                        if (grade.grade=="" )
-                            errorTextRequired = true;
-                        })
-                }
                 break;
             case 3:
-                var dependents = this.state.employee.dependents;
-                if (dependents.length > 0){
-                    dependents.forEach ( dependent => {
-                        if (dependent.name=="" || dependent.gender=="" || dependent.type=="" )
-                            errorTextRequired = true;
-                    })
-                }
                 break;
             case 4:
                 break;
@@ -229,16 +220,13 @@ class EmployeeDialog extends Component {
                 <StepLabel>Detail</StepLabel>
               </Step>
               <Step>
+                <StepLabel>Family</StepLabel>
+              </Step>
+              <Step>
                 <StepLabel>History</StepLabel>
               </Step>
               <Step>
-                <StepLabel>Grades</StepLabel>
-              </Step>
-              <Step>
-                <StepLabel>Dependents</StepLabel>
-              </Step>
-              <Step>
-                <StepLabel>Address</StepLabel>
+                <StepLabel>Grade</StepLabel>
               </Step>
               <Step>
                 <StepLabel>Location</StepLabel>

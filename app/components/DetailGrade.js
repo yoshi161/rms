@@ -11,6 +11,8 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
+import { Grid, Row, Col, Glyphicon, Button } from 'react-bootstrap';
+
 import DetailGradeDetail from './DetailGradeDetail'
 
 import LookupData from '../data/LookupData';
@@ -27,7 +29,7 @@ class DetailGrade extends Component {
         this.state = {
             gradeTemp : {
                 ds: "1",
-                grade: "JP",
+                grade: "SE1",
                 start: new Date(),
                 end: new Date(),
             },
@@ -48,8 +50,6 @@ class DetailGrade extends Component {
         this.props.setCurrentEmployeeTemp(current.employeeTemp);
     }
 
-
-
     handleChangeValue(object, value, type, idx) {
         var historiesTemp = _.cloneDeep(this.props.employeeTemp.grades);
         historiesTemp[idx][type] = value; 
@@ -60,21 +60,32 @@ class DetailGrade extends Component {
         this.props.setCurrentEmployeeTemp(propsTemp); 
     }
 
+    delete(index) {
+        var familiesTemp = _.cloneDeep(this.props.employeeTemp.grades);
+        familiesTemp.splice(index, 1); 
+        var propsTemp = update(this.props.employeeTemp, {
+             grades: {$set: familiesTemp} 
+             
+        });
+        this.props.setCurrentEmployeeTemp(propsTemp); 
+    }
+
 
     render() {
-        const grades = this.props.employeeTemp.grades;
+       const grades = this.props.employeeTemp.grades;
 
-
-
+       const actionDeleteButton = (index) => (
+                <Glyphicon glyph="trash" 
+                    onClick={() => this.delete(index)} />
+        );
 
         const detailNoEdit = (that, grades) => {
 
             return grades.map((row, index) => {
-                const start = row.start ? moment(row.start, "mm/dd/yyyy") : "";
-                const end = row.end ? moment(row.end, "mm/dd/yyyy") : "";
+                const start = row.start ? moment(row.start).format("MMM DD, YYYY") : "";
+                const end = row.end ? moment(row.end).format("MMM DD, YYYY") : "";
                 const ds = _.find(that.state.lookupDevStage, {'code': row.ds}).desc;
                 const grade = _.find(that.state.lookupGrade, {'code': row.grade}).desc;
-
 
                  return (     
                     <TableRow key={index}>
@@ -82,6 +93,8 @@ class DetailGrade extends Component {
                         <TableRowColumn>{grade}</TableRowColumn>
                         <TableRowColumn>{start}</TableRowColumn>
                         <TableRowColumn>{end}</TableRowColumn>
+                        <TableRowColumn>
+                        </TableRowColumn>
                     </TableRow>
                     )
                 })
@@ -89,9 +102,7 @@ class DetailGrade extends Component {
         }
 
         const detailWithEdit = (grades) => {
-
-
-
+            
             const lookupDevStage= this.state.lookupDevStage.map ( div =>
                 <MenuItem key={div.code} value={div.code} primaryText={div.desc} />
             );
@@ -137,6 +148,10 @@ class DetailGrade extends Component {
                                     autoOk={true}
                                 />
                             </TableRowColumn>
+                            <TableRowColumn>
+                                <Glyphicon glyph="trash" 
+                                    onClick={() => this.delete(index)} />
+                            </TableRowColumn>
                           </TableRow>
                     )
                 });
@@ -155,7 +170,7 @@ class DetailGrade extends Component {
                         detailWithEdit(grades) : null;
 
 
-        return(
+        return (
             <div className="content-container">
                 <h2 className="content-header">Grade</h2>
                     <div className="content">
@@ -168,6 +183,7 @@ class DetailGrade extends Component {
                                     <TableHeaderColumn>Grade</TableHeaderColumn>
                                     <TableHeaderColumn>Start Date</TableHeaderColumn>
                                     <TableHeaderColumn>End Date</TableHeaderColumn>
+                                    <TableHeaderColumn> </TableHeaderColumn>
                                 </TableRow>
                             </TableHeader>
                                 <TableBody
